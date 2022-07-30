@@ -1,30 +1,29 @@
 import 'dart:io';
 
+import 'package:h_ide/model/h_binary.dart';
 import 'package:h_ide/model/h_file.dart';
 
-class HFolder extends HFile {
-  const HFolder(
-    super.path, {
-    this.isOpened = false,
-  });
-  final bool isOpened;
+class HFileFolder extends HFile {
+  const HFileFolder(super.path);
   List<HFile> get children {
     final Directory directory = Directory(path);
     final list = directory.listSync();
-    return list.map((e) => HFile(e.path)).toList();
+    final fileList = list.map((e) => HFile.fromPath(e.path)).toList();
+    fileList.sort();
+    return fileList;
   }
 
-  List<HFolder> get folderList {
-    final List<HFolder> list = [];
+  List<HFileFolder> get folderList {
+    final List<HFileFolder> list = [];
     for (final file in children) {
-      if (file.isHFolder) {
-        list.add(HFolder(file.path));
+      if (file.isFolder) {
+        list.add(file as HFileFolder);
       }
     }
     return list;
   }
 
-  List<HFile> get fileList {
-    return List<HFile>.from(children.where((e) => !e.isHFolder));
+  List<HFileBinary> get fileList {
+    return List<HFileBinary>.from(children.where((e) => !e.isBinary));
   }
 }
