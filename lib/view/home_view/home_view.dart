@@ -1,4 +1,3 @@
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:h_ide/view/bottom_view/bottom_view.dart';
 import 'package:h_ide/view/code_view/code_view.dart';
@@ -10,6 +9,7 @@ class HomeView extends StatelessWidget {
 
   Widget upperView() {
     return ResizableWidget(
+      percentages: [0.2, 0.8],
       children: [
         FinderView(),
         CodeView(),
@@ -20,16 +20,13 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WindowBorder(
-        color: Colors.transparent,
-        width: 0,
-        child: ResizableWidget(
-          isHorizontalSeparator: true,
-          children: [
-            upperView(),
-            BottomView(),
-          ],
-        ),
+      body: ResizableWidget(
+        percentages: [0.8, 0.2],
+        isHorizontalSeparator: true,
+        children: [
+          upperView(),
+          BottomView(),
+        ],
       ),
     );
   }

@@ -8,11 +8,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  bitsdojo_window: ^0.1.2
   flutter_bloc: 
   bloc: 
   equatable: 
   resizable_widget: ^1.0.5
+  window_manager: ^0.2.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
