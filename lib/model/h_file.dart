@@ -28,7 +28,10 @@ abstract class HFile extends Equatable with Comparable<HFile> {
     final file = File(path);
     final type = file.statSync().type;
     if (type == FileSystemEntityType.directory) {
-      return HFileFolder(path);
+      return HFileFolder(
+        path,
+        children: HFileFolder.loadChildren(path, children: []),
+      );
     }
     return HFileBinary(path);
   }
@@ -40,4 +43,6 @@ abstract class HFile extends Equatable with Comparable<HFile> {
     }
     return isBinary ? 1 : -1;
   }
+
+  Map<String, dynamic> toMap();
 }

@@ -8,7 +8,11 @@ class FinderUseCase {
 
   HFileFolder currentFolder() {
     final currentPath = repo.currentPath();
-    return HFileFolder(currentPath);
+    final folder = HFileFolder(
+      currentPath,
+      children: HFileFolder.loadChildren(currentPath, children: []),
+    );
+    return folder;
   }
 
   Map<HFileFolder, bool> toggleFolderOpen(

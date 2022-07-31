@@ -25,7 +25,7 @@ class FinderBloc extends Bloc<FinderEvent, FinderState> {
     emit(
       state.copyWith(
           state: FinderStatus.success,
-          currentFolder: useCase.currentFolder(),
+          currentFolder: folder,
           openedMap: {folder: true}),
     );
   }

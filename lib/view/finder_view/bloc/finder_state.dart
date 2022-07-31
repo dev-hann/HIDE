@@ -10,7 +10,7 @@ enum FinderStatus {
 class FinderState extends Equatable {
   const FinderState({
     this.state = FinderStatus.init,
-    this.currentFolder = const HFileFolder("./"),
+    this.currentFolder = const HFileFolder("./", children: []),
     this.openedMap = const {},
   });
   final FinderStatus state;

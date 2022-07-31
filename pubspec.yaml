@@ -13,6 +13,8 @@ dependencies:
   equatable: 
   resizable_widget: ^1.0.5
   window_manager: ^0.2.5
+  hive: 
+  hive_flutter: 
 dev_dependencies:
   flutter_test:
     sdk: flutter
