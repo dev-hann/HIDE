@@ -1,10 +1,12 @@
-
 abstract class FinderRepo {
   Future init();
   void dispose();
-  Stream<List<dynamic>> fileListStream();
-  String currentPath();
+  Stream<List<String>> folderListStream();
+  String rootPath();
   List<String> fileList(String rootPath);
 
-  Future updateFile(String path, dynamic data);
+  List<String> folderList();
+  bool isOpened(String path);
+  Future openFolder(String path);
+  Future closeFolder(String path);
 }

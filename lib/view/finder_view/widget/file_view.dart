@@ -19,24 +19,47 @@ class HFileView extends StatelessWidget {
   }
 
   Widget folderView(HFile folder) {
-    return Row(
-      children: [
-        const Icon(Icons.folder),
-        Text(folder.path),
-      ],
-    );
-  }
-
-  Widget children(bool isOpened, List<HFile> fileList) {
-    if (!isOpened) {
-      return const SizedBox();
+    Widget folderWidget() {
+      return Row(
+        children: [
+          const Icon(Icons.folder),
+          Text(folder.path),
+        ],
+      );
     }
-    return Padding(
-      padding: const EdgeInsets.only(left: 8),
-      child: HFileView(
-        key: UniqueKey(),
-        fileList: fileList,
-      ),
+
+    Widget children(bool isOpened, List<HFile> fileList) {
+      if (!isOpened) {
+        return const SizedBox();
+      }
+      return Padding(
+        padding: const EdgeInsets.only(left: 8),
+        child: HFileView(
+          key: UniqueKey(),
+          fileList: fileList,
+        ),
+      );
+    }
+
+    return BlocBuilder<FinderBloc, FinderState>(
+      builder: (context, state) {
+        final bloc = BlocProvider.of<FinderBloc>(context);
+        final path = folder.path;
+        final isOpened = bloc.isOpened(path);
+        final list = bloc.fileList(path);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: () {
+                bloc.add(FinderOnSelectedFile(path, list));
+              },
+              child: folderWidget(),
+            ),
+            children(isOpened, list),
+          ],
+        );
+      },
     );
   }
 
@@ -44,28 +67,17 @@ class HFileView extends StatelessWidget {
     if (file.isBinary) {
       return fileView(file);
     }
-    return BlocBuilder<FinderBloc, FinderState>(builder: (context, state) {
-      final bloc = BlocProvider.of<FinderBloc>(context);
-      final path = file.path;
-      final isOpened = bloc.isOpened(path);
-      final list = bloc.fileList(path);
-      return Column(
-        children: [
-          GestureDetector(
-              onTap: () {
-                bloc.add(FinderOnSelectedFile(path, list));
-              },
-              child: folderView(file)),
-          children(isOpened, list),
-        ],
-      );
-    });
+    return folderView(file);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: fileList.map(item).toList(),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: fileList.map(item).toList(),
+      ),
     );
   }
 }

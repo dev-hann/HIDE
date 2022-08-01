@@ -22,17 +22,18 @@ class FinderBloc extends Bloc<FinderEvent, FinderState> {
   FutureOr<void> _onInit(
       FinderInitialized event, Emitter<FinderState> emit) async {
     await useCase.init();
-    final rootPath = useCase.rootPath();
-    emit(state.copyWith(
-      state: FinderStatus.success,
-      fileMap: {rootPath: useCase.fileList(rootPath)},
-    ));
-    await emit.forEach<Map<String, List<HFile>>>(
-      useCase.fileMapStream(),
+    emit(
+      state.copyWith(
+        state: FinderStatus.success,
+        opnedFolderList: useCase.folderList(),
+      ),
+    );
+    await emit.forEach<List<String>>(
+      useCase.folderListStream(),
       onData: (data) {
         return state.copyWith(
           state: FinderStatus.success,
-          // fileMap: data,
+          opnedFolderList: useCase.folderList(),
         );
       },
     );
@@ -41,19 +42,9 @@ class FinderBloc extends Bloc<FinderEvent, FinderState> {
   FutureOr<void> _onSelected(
       FinderOnSelectedFile event, Emitter<FinderState> emit) {
     emit(state.copyWith(state: FinderStatus.loading));
-    final map = state.fileMap;
+
     final path = event.path;
-    if (map.containsKey(path)) {
-      map.remove(path);
-    } else {
-      map[path] = event.fileList;
-    }
-    emit(
-      state.copyWith(
-        state: FinderStatus.success,
-        fileMap: map,
-      ),
-    );
+    useCase.toggleFolder(path);
   }
 
   String rootPath() {
@@ -61,10 +52,10 @@ class FinderBloc extends Bloc<FinderEvent, FinderState> {
   }
 
   bool isOpened(String path) {
-    return state.fileMap.containsKey(path);
+    return state.opnedFolderList.contains(path);
   }
 
   List<HFile> fileList(String path) {
-    return state.fileMap[path] ?? useCase.fileList(path);
+    return useCase.fileList(path);
   }
 }

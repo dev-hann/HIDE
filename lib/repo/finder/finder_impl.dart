@@ -1,18 +1,20 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:h_ide/data/data_base/file_box.dart';
+import 'package:h_ide/data/data_base/finder_box.dart';
 import 'package:h_ide/repo/finder/finder_repo.dart';
 
 class FinderImpl implements FinderRepo {
-  final StreamController<List> streamController = StreamController.broadcast();
-  final FileBox fileBox = FileBox();
+  final StreamController<List<String>> streamController =
+      StreamController.broadcast();
+  final FinderBox finderBox = FinderBox();
   late StreamSubscription fileStream;
   @override
   Future init() async {
-    await fileBox.openBox();
-    fileStream = fileBox.stream().listen((_) {
-      streamController.add(fileBox.read());
+    await finderBox.openBox();
+    // await finderBox.synchronizes([]);
+    fileStream = finderBox.stream().listen((_) {
+      streamController.add(finderBox.read());
     });
   }
 
@@ -22,12 +24,12 @@ class FinderImpl implements FinderRepo {
   }
 
   @override
-  Stream<List> fileListStream() {
+  Stream<List<String>> folderListStream() {
     return streamController.stream;
   }
 
   @override
-  String currentPath() {
+  String rootPath() {
     return Directory.current.path;
   }
 
@@ -43,7 +45,22 @@ class FinderImpl implements FinderRepo {
   }
 
   @override
-  Future updateFile(String path, data) async {
-    await fileBox.update(path, data);
+  Future closeFolder(String path) async {
+    await finderBox.closeFolder(path);
+  }
+
+  @override
+  Future openFolder(String path) async {
+    await finderBox.openFolder(path);
+  }
+
+  @override
+  bool isOpened(String path) {
+    return finderBox.isOpened(path);
+  }
+
+  @override
+  List<String> folderList() {
+    return finderBox.read();
   }
 }

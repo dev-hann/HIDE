@@ -5,12 +5,8 @@ import 'package:equatable/equatable.dart';
 class HFile extends Equatable with Comparable<HFile> {
   const HFile(
     this.path,
-    // {
-    // this.isOpened = false,
-    // }
   );
   final String path;
-  // final bool isOpened;
   FileSystemEntityType get type {
     final file = File(path);
     return file.statSync().type;
@@ -38,7 +34,6 @@ class HFile extends Equatable with Comparable<HFile> {
   Map<String, dynamic> toMap() {
     return {
       'path': path,
-      // 'isOpened': isOpened,
     };
   }
 
@@ -46,7 +41,6 @@ class HFile extends Equatable with Comparable<HFile> {
     final data = Map<String, dynamic>.from(map);
     return HFile(
       data['path'],
-      // isOpened: data['isOpened'],
     );
   }
 }

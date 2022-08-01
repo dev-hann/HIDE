@@ -10,21 +10,21 @@ enum FinderStatus {
 class FinderState extends Equatable {
   const FinderState({
     this.state = FinderStatus.init,
-    this.fileMap = const {},
+    this.opnedFolderList = const [],
   });
   final FinderStatus state;
-  final Map<String, List<HFile>> fileMap;
+  final List<String> opnedFolderList;
 
   @override
-  List<Object?> get props => [state, fileMap];
+  List<Object?> get props => [state, opnedFolderList];
 
   FinderState copyWith({
     FinderStatus? state,
-    Map<String, List<HFile>>? fileMap,
+    List<String>? opnedFolderList,
   }) {
     return FinderState(
       state: state ?? this.state,
-      fileMap: fileMap ?? this.fileMap,
+      opnedFolderList: opnedFolderList ?? this.opnedFolderList,
     );
   }
 }

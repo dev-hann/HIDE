@@ -9,16 +9,12 @@ class FinderUseCase {
     await repo.init();
   }
 
-  Stream<Map<String, List<HFile>>> fileMapStream() {
-    return repo.fileListStream().map((list) {
-      final res = list.map((data) => HFile.fromMap(data)).toList();
-      res.sort();
-      return {};
-    });
+  Stream<List<String>> folderListStream() {
+    return repo.folderListStream();
   }
 
   String rootPath() {
-    return repo.currentPath();
+    return repo.rootPath();
   }
 
   List<HFile> fileList(String path) {
@@ -28,15 +24,23 @@ class FinderUseCase {
       return file;
     }).toList();
     res.sort();
-
     return res;
   }
 
-  List<HFile> toggleOpenFolder(HFile file) {
-    return [];
+  List<String> folderList() {
+    return repo.folderList();
   }
 
-  Future updateFile(HFile file) async {
-    await repo.updateFile(file.path, file.toMap());
+  bool isOpened(String path) {
+    return repo.isOpened(path);
+  }
+
+  Future toggleFolder(String path) async {
+    final isOpened = repo.isOpened(path);
+    if (isOpened) {
+      await repo.closeFolder(path);
+    } else {
+      await repo.openFolder(path);
+    }
   }
 }

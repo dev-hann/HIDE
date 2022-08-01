@@ -8,6 +8,10 @@ abstract class HBox {
     box = await Hive.openBox(name);
   }
 
+  Future clearBox() async {
+    await box.clear();
+  }
+
   Stream<BoxEvent> stream() {
     return box.watch();
   }
