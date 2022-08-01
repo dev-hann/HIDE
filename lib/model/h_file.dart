@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
-import 'package:h_ide/model/h_binary.dart';
-import 'package:h_ide/model/h_folder.dart';
 
-abstract class HFile extends Equatable with Comparable<HFile> {
-  const HFile(this.path);
+class HFile extends Equatable with Comparable<HFile> {
+  const HFile(
+    this.path,
+    // {
+    // this.isOpened = false,
+    // }
+  );
   final String path;
-
+  // final bool isOpened;
   FileSystemEntityType get type {
     final file = File(path);
     return file.statSync().type;
@@ -24,25 +27,26 @@ abstract class HFile extends Equatable with Comparable<HFile> {
   @override
   List<Object?> get props => [path];
 
-  static HFile fromPath(String path) {
-    final file = File(path);
-    final type = file.statSync().type;
-    if (type == FileSystemEntityType.directory) {
-      return HFileFolder(
-        path,
-        children: HFileFolder.loadChildren(path, children: []),
-      );
-    }
-    return HFileBinary(path);
-  }
-
   @override
   int compareTo(HFile other) {
-    if (other.type == type) {
-      return other.path.compareTo(path);
+    if (type == other.type) {
+      return path.compareTo(other.path);
     }
     return isBinary ? 1 : -1;
   }
 
-  Map<String, dynamic> toMap();
+  Map<String, dynamic> toMap() {
+    return {
+      'path': path,
+      // 'isOpened': isOpened,
+    };
+  }
+
+  factory HFile.fromMap(dynamic map) {
+    final data = Map<String, dynamic>.from(map);
+    return HFile(
+      data['path'],
+      // isOpened: data['isOpened'],
+    );
+  }
 }

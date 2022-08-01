@@ -21,19 +21,18 @@ class _FinderView extends StatelessWidget {
     return ColoredBox(
       color: Colors.red.withOpacity(0.5),
       child: BlocBuilder<FinderBloc, FinderState>(
-        buildWhen:(pre,curr){
-          return pre!=curr  && curr.state==FinderStatus.success;
+        buildWhen: (pre, curr) {
+          return pre != curr && curr.state == FinderStatus.success;
         },
         builder: (context, state) {
-          final folder = state.currentFolder;
-          return HFileView(
-            file: folder,
-            rootPath: folder.path,
-            onTapFile: (file) {
-              BlocProvider.of<FinderBloc>(context)
-                  .add(FinderOnSelectedFile(file));
-              print(file.path);
-            },
+          final bloc = BlocProvider.of<FinderBloc>(context);
+          final path = bloc.rootPath();
+          final list = bloc.fileList(path);
+          return SingleChildScrollView(
+            child: HFileView(
+              key: UniqueKey(),
+              fileList: list,
+            ),
           );
         },
       ),

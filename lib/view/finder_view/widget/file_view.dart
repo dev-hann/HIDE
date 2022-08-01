@@ -1,93 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:h_ide/model/h_file.dart';
-import 'package:h_ide/model/h_folder.dart';
 import 'package:h_ide/view/finder_view/bloc/finder_bloc.dart';
 
 class HFileView extends StatelessWidget {
   const HFileView({
     Key? key,
-    required this.file,
-    required this.rootPath,
-    required this.onTapFile,
+    required this.fileList,
   }) : super(key: key);
-
-  final HFile file;
-  final String rootPath;
-  final Function(HFile file) onTapFile;
-  bool get isFolder => file.isFolder;
-  String get path {
-    final filePath = file.path;
-    if (filePath == rootPath) {
-      return rootPath;
-    }
-    return filePath.replaceFirst(rootPath, "").substring(1);
-  }
-
-  Widget fileView() {
+  final List<HFile> fileList;
+  Widget fileView(HFile file) {
     return Row(
       children: [
         const Icon(Icons.file_open),
-        Text(path),
+        Text(file.path),
       ],
     );
   }
 
-  Widget folderView() {
+  Widget folderView(HFile folder) {
     return Row(
       children: [
         const Icon(Icons.folder),
-        Text(path),
+        Text(folder.path),
       ],
     );
   }
 
-  Widget children() {
-    return Builder(builder: (conetxt) {
-      final folder = file as HFileFolder;
-      final isOpend =
-          BlocProvider.of<FinderBloc>(conetxt).isOpendFolder(folder);
-      if (!isOpend) {
-        return const SizedBox();
-      }
-      return Padding(
-        padding: const EdgeInsets.only(left: 8),
-        child: Column(
-          children: folder.children
-              .map(
-                (file) => HFileView(
-                  file: file,
-                  rootPath: rootPath,
-                  onTapFile: onTapFile,
-                ),
-              )
-              .toList(),
-        ),
-      );
-    });
-  }
-
-  Widget item() {
-    if (!isFolder) {
-      return fileView();
+  Widget children(bool isOpened, List<HFile> fileList) {
+    if (!isOpened) {
+      return const SizedBox();
     }
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          folderView(),
-          children(),
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: HFileView(
+        key: UniqueKey(),
+        fileList: fileList,
       ),
     );
   }
 
+  Widget item(HFile file) {
+    if (file.isBinary) {
+      return fileView(file);
+    }
+    return BlocBuilder<FinderBloc, FinderState>(builder: (context, state) {
+      final bloc = BlocProvider.of<FinderBloc>(context);
+      final path = file.path;
+      final isOpened = bloc.isOpened(path);
+      final list = bloc.fileList(path);
+      return Column(
+        children: [
+          GestureDetector(
+              onTap: () {
+                bloc.add(FinderOnSelectedFile(path, list));
+              },
+              child: folderView(file)),
+          children(isOpened, list),
+        ],
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        onTapFile(file);
-      },
-      child: item(),
+    return Column(
+      children: fileList.map(item).toList(),
     );
   }
 }
