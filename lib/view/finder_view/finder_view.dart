@@ -8,16 +8,6 @@ class FinderView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => FinderBloc()..add(FinderInitialized()),
-      child: _FinderView(),
-    );
-  }
-}
-
-class _FinderView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
     return ColoredBox(
       color: Colors.red.withOpacity(0.5),
       child: BlocBuilder<FinderBloc, FinderState>(

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:h_ide/data/data_base/h_box.dart';
 import 'package:h_ide/repo/window/window_impl.dart';
 import 'package:h_ide/use_case/window/window_use_case.dart';
+import 'package:h_ide/view/code_view/bloc/code_bloc.dart';
+import 'package:h_ide/view/finder_view/bloc/finder_bloc.dart';
 import 'package:h_ide/view/home_view/bloc/home_bloc.dart';
 import 'package:h_ide/view/home_view/home_view.dart';
 
@@ -14,8 +16,18 @@ void main() async {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BlocProvider(
-        create: (_) => HomeBloc()..add(HomeInitialized(useCase)),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => HomeBloc()..add(HomeInitialized(useCase)),
+          ),
+          BlocProvider(
+            create: (_) => FinderBloc()..add(FinderInitialized()),
+          ),
+          BlocProvider(
+            create: (_) => CodeBloc(),
+          ),
+        ],
         child: const HomeView(),
       ),
     ),

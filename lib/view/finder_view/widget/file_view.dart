@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:h_ide/model/h_file.dart';
+import 'package:h_ide/view/code_view/bloc/code_bloc.dart';
 import 'package:h_ide/view/finder_view/bloc/finder_bloc.dart';
 
 class HFileView extends StatelessWidget {
@@ -10,12 +11,19 @@ class HFileView extends StatelessWidget {
   }) : super(key: key);
   final List<HFile> fileList;
   Widget fileView(HFile file) {
-    return Row(
-      children: [
-        const Icon(Icons.file_open),
-        Text(file.path),
-      ],
-    );
+    return Builder(builder: (context) {
+      return GestureDetector(
+        onTap: () {
+          BlocProvider.of<CodeBloc>(context).add(CodeInitialized(file));
+        },
+        child: Row(
+          children: [
+            const Icon(Icons.file_open),
+            Text(file.path),
+          ],
+        ),
+      );
+    });
   }
 
   Widget folderView(HFile folder) {

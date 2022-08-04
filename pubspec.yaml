@@ -15,6 +15,7 @@ dependencies:
   window_manager: ^0.2.5
   hive: 
   hive_flutter: 
+  flutter_quill: ^5.4.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
