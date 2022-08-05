@@ -1,12 +1,15 @@
+import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:h_ide/view/code_view/bloc/code_bloc.dart';
 
 class CodeView extends StatelessWidget {
-  const CodeView({Key? key}) : super(key: key);
+  CodeView({Key? key}) : super(key: key);
 
+  final CodeController controller = CodeController(patternMap: {
+    "class": TextStyle(color: Colors.red),
+  });
   @override
   Widget build(BuildContext context) {
     return RawKeyboardListener(
@@ -21,16 +24,8 @@ class CodeView extends StatelessWidget {
           return pre != curr || curr.state == CodeStatus.success;
         },
         builder: (context, state) {
-          return QuillEditor(
-            textCapitalization: TextCapitalization.none,
-            scrollable: true,
-            controller: BlocProvider.of<CodeBloc>(context).codeController,
-            readOnly: false,
-            autoFocus: true,
-            expands: true,
-            focusNode: FocusNode(),
-            padding: EdgeInsets.all(8),
-            scrollController: ScrollController(),
+          return CodeField(
+            controller: controller,
           );
         },
       ),
