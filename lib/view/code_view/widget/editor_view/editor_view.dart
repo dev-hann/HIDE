@@ -13,13 +13,16 @@ class EditorView extends StatelessWidget {
       color: Colors.transparent,
       child: Align(
         alignment: Alignment.topLeft,
-        child: EditableText(
-          maxLines: null,
-          controller: controller,
-          style: const TextStyle(color: Colors.black),
-          cursorColor: Colors.black,
-          backgroundCursorColor: Colors.red,
-          focusNode: controller.focusNode,
+        child: DefaultTextStyle(
+          style: Theme.of(context).textTheme.bodyLarge!,
+          child: EditableText(
+            maxLines: null,
+            controller: controller,
+            style: Theme.of(context).textTheme.bodyText1!,
+            cursorColor: Colors.black,
+            backgroundCursorColor: Colors.red,
+            focusNode: controller.focusNode,
+          ),
         ),
       ),
     );

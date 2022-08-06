@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:h_ide/data/data_base/h_box.dart';
 import 'package:h_ide/repo/window/window_impl.dart';
 import 'package:h_ide/use_case/window/window_use_case.dart';
@@ -16,6 +17,9 @@ void main() async {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        textTheme: GoogleFonts.ubuntuMonoTextTheme(),
+      ),
       home: MultiBlocProvider(
         providers: [
           BlocProvider(

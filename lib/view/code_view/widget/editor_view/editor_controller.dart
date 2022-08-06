@@ -19,23 +19,21 @@ class EditorController extends TextEditingController {
     TextStyle? style,
     required bool withComposing,
   }) {
-    final keyList = syntaxMap.keys;
     final List<TextSpan> list = [];
     final lines = text.split("\n");
+    final defaultStyle = Theme.of(context).textTheme.bodyText1!;
     for (final line in lines) {
       final words = line.split(" ");
+
       final List<TextSpan> wordSpanList = [];
       for (final word in words) {
-        TextStyle style = TextStyle(color: Colors.black);
-        if (keyList.contains(word)) {
-          style = syntaxMap[word]!;
-        }
-        wordSpanList.add(TextSpan(text: word, style: style));
-        wordSpanList.add(TextSpan(text: ' ', style: style));
+        TextStyle tmpStyle = syntaxMap[word] ?? defaultStyle;
+        wordSpanList.add(TextSpan(text: word, style: tmpStyle));
+        wordSpanList.add(TextSpan(text: ' ', style: tmpStyle));
       }
       wordSpanList.removeLast();
       list.addAll(wordSpanList);
-      list.add(TextSpan(text: "\n", style: TextStyle(color: Colors.black)));
+      list.add(TextSpan(text: "\n", style: defaultStyle));
     }
     list.removeLast();
     return TextSpan(children: list);

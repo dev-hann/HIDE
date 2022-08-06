@@ -15,10 +15,10 @@ class NumberView extends StatelessWidget {
       builder: (context, value, child) {
         final length = value.text.split("\n").length;
         return SizedBox(
-          width: math.max(length.toString().length * 10, 20),
+          width: math.max(length.toString().length * 10, 30),
           child: Center(
             child: ListView.builder(
-              padding: const EdgeInsets.only(bottom: kToolbarHeight*2),
+              padding: const EdgeInsets.only(bottom: kToolbarHeight * 2),
               shrinkWrap: true,
               itemCount: length,
               itemBuilder: (context, index) {
