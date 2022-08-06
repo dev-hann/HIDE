@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:h_ide/view/bottom_view/bottom_view.dart';
 import 'package:h_ide/view/code_view/code_view.dart';
@@ -10,6 +12,7 @@ class HomeView extends StatelessWidget {
   Widget upperView() {
     return ResizableWidget(
       percentages: [0.2, 0.8],
+      separatorColor:Colors.black,
       children: [
         FinderView(),
         CodeView(),
@@ -20,13 +23,17 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ResizableWidget(
-        percentages: [0.8, 0.2],
-        isHorizontalSeparator: true,
-        children: [
-          upperView(),
-          BottomView(),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ResizableWidget(
+          percentages: [0.8, 0.2],
+          isHorizontalSeparator: true,
+      separatorColor:Colors.black,
+          children: [
+            upperView(),
+            BottomView(),
+          ],
+        ),
       ),
     );
   }

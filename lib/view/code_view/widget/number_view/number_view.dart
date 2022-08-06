@@ -10,27 +10,30 @@ class NumberView extends StatelessWidget {
   final EditorController controller;
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<TextEditingValue>(
-      valueListenable: controller,
-      builder: (context, value, child) {
-        final length = value.text.split("\n").length;
-        return SizedBox(
-          width: math.max(length.toString().length * 10, 30),
-          child: Center(
-            child: ListView.builder(
-              padding: const EdgeInsets.only(bottom: kToolbarHeight * 2),
-              shrinkWrap: true,
-              itemCount: length,
-              itemBuilder: (context, index) {
-                return Text(
-                  "${index + 1}",
-                  textAlign: TextAlign.end,
-                );
-              },
+    return DefaultTextStyle(
+      style: Theme.of(context).textTheme.bodyText1!,
+      child: ValueListenableBuilder<TextEditingValue>(
+        valueListenable: controller,
+        builder: (context, value, child) {
+          final length = value.text.split("\n").length;
+          return SizedBox(
+            width: math.max(length.toString().length * 10, 30),
+            child: Center(
+              child: ListView.builder(
+                padding: const EdgeInsets.only(bottom: kToolbarHeight * 2),
+                shrinkWrap: true,
+                itemCount: length,
+                itemBuilder: (context, index) {
+                  return Text(
+                    "${index + 1}",
+                    textAlign: TextAlign.end,
+                  );
+                },
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

@@ -4,9 +4,10 @@ import 'package:h_ide/view/code_view/bloc/code_bloc.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor_view.dart';
 import 'package:h_ide/view/code_view/widget/number_view/number_view.dart';
 import 'package:h_ide/view/code_view/widget/tab_view/tab_view.dart';
+import 'package:h_ide/widget/glass_card.dart';
 
 class CodeView extends StatelessWidget {
-  CodeView({Key? key}) : super(key: key);
+  const CodeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

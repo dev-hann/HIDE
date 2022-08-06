@@ -17,6 +17,7 @@ class WindowImpl extends WindowRepo {
       await windowManager.setFullScreen(true);
       await windowManager.show();
       await windowManager.focus();
+      // await windowManager.setBackgroundColor(Colors.transparent);
     });
   }
 }
