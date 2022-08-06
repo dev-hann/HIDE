@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 
 class EditorController extends TextEditingController {
+  EditorController({
+    Map<String, TextStyle>? syntaxMap,
+  }) : syntaxMap = syntaxMap ?? {};
+  final FocusNode focusNode = FocusNode();
+  final ScrollController scrollController = ScrollController();
+  final Map<String, TextStyle> syntaxMap;
+
+  void moveToEnd() {
+    focusNode.requestFocus();
+    selection = TextSelection.collapsed(offset: text.length);
+  }
+
   @override
   TextSpan buildTextSpan({
     required BuildContext context,
     TextStyle? style,
     required bool withComposing,
   }) {
-    final syntaxMap = {"class": TextStyle(color: Colors.red)};
     final keyList = syntaxMap.keys;
     final List<TextSpan> list = [];
     final lines = text.split("\n");
