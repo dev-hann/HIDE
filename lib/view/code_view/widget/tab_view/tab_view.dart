@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:h_ide/view/code_view/widget/tab_view/tab_button.dart';
 
 class TabView extends StatelessWidget {
   const TabView({
@@ -17,47 +18,29 @@ class TabView extends StatelessWidget {
   final double itemHeight;
   final double itemWidth;
   Widget item(int index) {
-    final ValueNotifier<bool> hoverNotifier = ValueNotifier(false);
-    return ValueListenableBuilder(
-        valueListenable: hoverNotifier,
-        builder: (context, value, _) {
-          return MouseRegion(
-            onExit: (_) {
-              hoverNotifier.value = false;
-            },
-            onEnter: (_) {
-              hoverNotifier.value = true;
-            },
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.red.withOpacity(hoverNotifier.value ? 0.5 : 0),
-                border: Border.all(color: Colors.red),
-              ),
-              child: SizedBox(
-                width: itemWidth,
-                height: itemHeight,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        tabList[index],
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Icon(Icons.close),
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
+    final label = tabList[index];
+    return TabButton(
+      isSelected: index == 1,
+      selectedColor: Colors.grey,
+      unSelectedColor: Colors.black,
+      label: label,
+      onTap: () {
+        print("$index");
+      },
+      onTapClose: () {},
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: itemHeight,
-      child: ListView.builder(
+      child: ListView.separated(
+        separatorBuilder: (_, index) {
+          return const VerticalDivider(
+            width: 1,
+          );
+        },
         padding: EdgeInsets.zero,
         scrollDirection: Axis.horizontal,
         itemCount: tabList.length,
