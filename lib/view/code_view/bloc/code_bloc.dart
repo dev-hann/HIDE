@@ -25,6 +25,12 @@ class CodeBloc extends Bloc<CodeEvent, CodeState> {
 
   final EditorController controller = EditorController(syntaxMap: syntaxMap);
 
+  List<String> get tabList {
+    return state.controllerMap.keys.map((e) {
+      return e.path;
+    }).toList();
+  }
+
   FutureOr<void> _onInit(CodeInitialized event, Emitter<CodeState> emit) async {
     emit(state.copyWith(state: CodeStatus.loading));
     final path = event.file.path;

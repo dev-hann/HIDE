@@ -16,12 +16,11 @@ void main() async {
   await useCase.init();
   runApp(
     MaterialApp(
-      
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        // textTheme: GoogleFonts.robotoMonoTextTheme(),
-        
-      ),
+      // theme: ThemeData(
+      //   // textTheme: GoogleFonts.robotoMonoTextTheme(),
+      //
+      // ),
       home: MultiBlocProvider(
         providers: [
           BlocProvider(

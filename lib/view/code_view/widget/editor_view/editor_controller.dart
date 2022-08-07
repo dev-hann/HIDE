@@ -33,7 +33,7 @@ class EditorController extends TextEditingController {
       }
       wordSpanList.removeLast();
       list.addAll(wordSpanList);
-      list.add(TextSpan(text: "\n ", style: defaultStyle));
+      list.add(TextSpan(text: "\n", style: defaultStyle));
     }
     list.removeLast();
     return TextSpan(children: list);
