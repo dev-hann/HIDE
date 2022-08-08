@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:h_ide/model/h_file.dart';
 import 'package:h_ide/view/code_view/widget/tab_view/tab_button.dart';
 
 class TabView extends StatelessWidget {
   const TabView({
     Key? key,
-    required this.tabList,
+    required this.index,
+    required this.fileList,
     required this.onTap,
     required this.onTapClose,
     double? itemWidth,
@@ -12,22 +14,25 @@ class TabView extends StatelessWidget {
   })  : itemWidth = itemWidth ?? 150,
         itemHeight = itemHeight ?? 30,
         super(key: key);
-  final List<String> tabList;
-  final Function(int index) onTap;
-  final Function(int index) onTapClose;
+  final int index;
+  final List<HFile> fileList;
+  final Function(HFile file) onTap;
+  final Function(HFile file) onTapClose;
   final double itemHeight;
   final double itemWidth;
   Widget item(int index) {
-    final label = tabList[index];
+    final file = fileList[index];
     return TabButton(
-      isSelected: index == 1,
+      isSelected: index == this.index,
       selectedColor: Colors.grey,
       unSelectedColor: Colors.black,
-      label: label,
+      label: file.path.split("/").last,
       onTap: () {
-        print("$index");
+        onTap(file);
       },
-      onTapClose: () {},
+      onTapClose: () {
+        onTapClose(file);
+      },
     );
   }
 
@@ -37,13 +42,11 @@ class TabView extends StatelessWidget {
       height: itemHeight,
       child: ListView.separated(
         separatorBuilder: (_, index) {
-          return const VerticalDivider(
-            width: 1,
-          );
+          return const VerticalDivider(width: 1);
         },
         padding: EdgeInsets.zero,
         scrollDirection: Axis.horizontal,
-        itemCount: tabList.length,
+        itemCount: fileList.length,
         itemBuilder: (context, index) {
           return item(index);
         },

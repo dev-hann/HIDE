@@ -1,13 +1,19 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-class EditorController extends TextEditingController {
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:h_ide/model/h_file.dart';
+
+class EditorController extends TextEditingController with EquatableMixin {
   EditorController({
+    required this.file,
     Map<String, TextStyle>? syntaxMap,
-  }) : syntaxMap = syntaxMap ?? {};
+  })  : syntaxMap = syntaxMap ?? {},
+        super(text: File(file.path).readAsStringSync());
   final FocusNode focusNode = FocusNode();
   final ScrollController scrollController = ScrollController();
   final Map<String, TextStyle> syntaxMap;
-
+  final HFile file;
   void moveToEnd() {
     focusNode.requestFocus();
     selection = TextSelection.collapsed(offset: text.length);
@@ -38,4 +44,7 @@ class EditorController extends TextEditingController {
     list.removeLast();
     return TextSpan(children: list);
   }
+
+  @override
+  List<Object?> get props => [file];
 }

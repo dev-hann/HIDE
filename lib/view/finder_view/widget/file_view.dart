@@ -17,7 +17,7 @@ class HFileView extends StatelessWidget {
     return Builder(builder: (context) {
       return GestureDetector(
         onTap: () {
-          BlocProvider.of<CodeBloc>(context).add(CodeInitialized(file));
+          BlocProvider.of<CodeBloc>(context).add(CodeFileOpened(file));
         },
         child: Row(
           children: [

@@ -1,7 +1,6 @@
 library code_bloc;
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -20,23 +19,49 @@ const syntaxMap = <String, TextStyle>{
 
 class CodeBloc extends Bloc<CodeEvent, CodeState> {
   CodeBloc() : super(const CodeState()) {
-    on<CodeInitialized>(_onInit);
+    on<CodeFileOpened>(_onFileOpened);
+    on<CodeFileClosed>(_onFileClosed);
+  }
+  EditorController? get controller {
+    final index = state.index;
+    if (index == -1) {
+      return null;
+    }
+    return state.controllerList[index];
   }
 
-  final EditorController controller = EditorController(syntaxMap: syntaxMap);
-
-  List<String> get tabList {
-    return state.controllerMap.keys.map((e) {
-      return e.path;
-    }).toList();
+  List<HFile> get fileList {
+    return state.controllerList.map((e) => e.file).toList();
   }
 
-  FutureOr<void> _onInit(CodeInitialized event, Emitter<CodeState> emit) async {
+  FutureOr<void> _onFileOpened(
+      CodeFileOpened event, Emitter<CodeState> emit) async {
     emit(state.copyWith(state: CodeStatus.loading));
-    final path = event.file.path;
-    final file = File(path);
-    final data = "${await file.readAsString()}";
-    controller.text = data;
-    emit(state.copyWith(state: CodeStatus.success));
+    final onTappedFile = event.file;
+    final list = [...state.controllerList];
+    int index =
+        list.map((e) => e.file).toList().indexWhere((e) => e == onTappedFile);
+    if (index == -1) {
+      final controller = EditorController(file: onTappedFile);
+      list.add(controller);
+      index = list.length - 1;
+    }
+    emit(state.copyWith(
+      state: CodeStatus.success,
+      index: index,
+      controllerList: list,
+    ));
+  }
+
+  FutureOr<void> _onFileClosed(CodeFileClosed event, Emitter<CodeState> emit) {
+    emit(state.copyWith(state: CodeStatus.loading));
+    final onTappedFile = event.file;
+    final list = [...state.controllerList];
+    final index =
+        list.map((e) => e.file).toList().indexWhere((e) => e == onTappedFile);
+    if (index != -1) {
+      list.removeAt(index);
+      emit(state.copyWith(state: CodeStatus.success, controllerList: list));
+    }
   }
 }

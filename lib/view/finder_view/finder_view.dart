@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:h_ide/view/finder_view/bloc/finder_bloc.dart';
 import 'package:h_ide/view/finder_view/widget/file_view.dart';
-import 'package:h_ide/widget/glass_card.dart';
 
 class FinderView extends StatelessWidget {
   const FinderView({Key? key}) : super(key: key);

@@ -10,22 +10,24 @@ enum CodeStatus {
 class CodeState extends Equatable {
   const CodeState({
     this.state = CodeStatus.init,
-    this.controllerMap = const {},
-    this.currentControllerIndex = -1,
+    this.controllerList = const [],
+    this.index = -1,
   });
   final CodeStatus state;
-  final Map<HFile, EditorController> controllerMap;
-  final int currentControllerIndex;
+  final List<EditorController> controllerList;
+  final int index;
   @override
-  List<Object?> get props => [state, controllerMap];
+  List<Object?> get props => [state, controllerList];
 
   CodeState copyWith({
     CodeStatus? state,
-    Map<HFile, EditorController>? controllerMap,
+    List<EditorController>? controllerList,
+    int? index,
   }) {
     return CodeState(
       state: state ?? this.state,
-      controllerMap: controllerMap ?? this.controllerMap,
+      controllerList: controllerList ?? this.controllerList,
+      index: index ?? this.index,
     );
   }
 }
