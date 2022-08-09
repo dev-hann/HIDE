@@ -12,7 +12,7 @@ class HomeView extends StatelessWidget {
   Widget upperView() {
     return ResizableWidget(
       percentages: [0.2, 0.8],
-      separatorColor:Colors.black,
+      separatorColor: Colors.black,
       children: [
         FinderView(),
         CodeView(),
@@ -23,12 +23,13 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0x1f1f1f),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ResizableWidget(
           percentages: [0.8, 0.2],
           isHorizontalSeparator: true,
-      separatorColor:Colors.black,
+          separatorColor: Colors.black,
           children: [
             upperView(),
             BottomView(),

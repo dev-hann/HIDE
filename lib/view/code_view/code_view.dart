@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:h_ide/view/code_view/bloc/code_bloc.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor_controller.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor_view.dart';
-import 'package:h_ide/view/code_view/widget/number_view/number_view.dart';
 import 'package:h_ide/view/code_view/widget/tab_view/tab_view.dart';
 
 class CodeView extends StatelessWidget {
@@ -36,22 +35,10 @@ class CodeView extends StatelessWidget {
         controller.moveToEnd();
       },
       child: SingleChildScrollView(
-        controller: controller.scrollController,
         child: ColoredBox(
           color: Colors.transparent,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              NumberView(
-                controller: controller,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: EditorView(
-                  controller: controller,
-                ),
-              ),
-            ],
+          child: EditorView(
+            controller: controller,
           ),
         ),
       ),
@@ -59,13 +46,13 @@ class CodeView extends StatelessWidget {
   }
 
   Widget emptyView() {
-    return Text("Controller is empty");
+    return const Text("Controller is empty");
   }
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.grey,
+      color: Colors.transparent,
       child: BlocBuilder<CodeBloc, CodeState>(
         buildWhen: (pre, curr) {
           return pre != curr || curr.state == CodeStatus.success;

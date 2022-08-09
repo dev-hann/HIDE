@@ -9,30 +9,34 @@ class TabView extends StatelessWidget {
     required this.fileList,
     required this.onTap,
     required this.onTapClose,
-    double? itemWidth,
     double? itemHeight,
-  })  : itemWidth = itemWidth ?? 150,
-        itemHeight = itemHeight ?? 30,
+  })  : itemHeight = itemHeight ?? 60,
         super(key: key);
   final int index;
   final List<HFile> fileList;
   final Function(HFile file) onTap;
   final Function(HFile file) onTapClose;
   final double itemHeight;
-  final double itemWidth;
-  Widget item(int index) {
-    final file = fileList[index];
-    return TabButton(
-      isSelected: index == this.index,
-      selectedColor: Colors.grey,
-      unSelectedColor: Colors.black,
-      label: file.path.split("/").last,
-      onTap: () {
-        onTap(file);
-      },
-      onTapClose: () {
-        onTapClose(file);
-      },
+
+  Widget item(int itemIndex) {
+    final file = fileList[itemIndex];
+    return DefaultTextStyle(
+      style: const TextStyle(color: Colors.white),
+      child: TabButton(
+        isSelected: index == itemIndex,
+        selectedColor: Colors.white.withOpacity(0.15),
+        unSelectedColor: Color(0x1f1f1f),
+        selectedStyle: TextStyle(),
+        // unSelectedStyle: TextStyle(color: Color(0xA1A1A1)),
+        unSelectedStyle: TextStyle(),
+        label: file.path.split("/").last,
+        onTap: () {
+          onTap(file);
+        },
+        onTapClose: () {
+          onTapClose(file);
+        },
+      ),
     );
   }
 
@@ -48,7 +52,10 @@ class TabView extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: fileList.length,
         itemBuilder: (context, index) {
-          return item(index);
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Center(child: item(index)),
+          );
         },
       ),
     );
