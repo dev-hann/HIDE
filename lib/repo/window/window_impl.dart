@@ -8,7 +8,7 @@ class WindowImpl extends WindowRepo {
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(
       center: true,
-      backgroundColor: Colors.transparent,
+      // backgroundColor: Colors.transparent,
       skipTaskbar: false,
       titleBarStyle: TitleBarStyle.hidden,
       alwaysOnTop: true,

@@ -34,13 +34,8 @@ class CodeView extends StatelessWidget {
       onTap: () {
         controller.moveToEnd();
       },
-      child: SingleChildScrollView(
-        child: ColoredBox(
-          color: Colors.transparent,
-          child: EditorView(
-            controller: controller,
-          ),
-        ),
+      child: EditorView(
+        controller: controller,
       ),
     );
   }
