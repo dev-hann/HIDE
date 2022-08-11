@@ -77,25 +77,29 @@ class TabButton extends HButton {
                 color: buttonColor(onHover),
               ),
               child: Padding(
-                
-                padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                 child: Row(
                   children: [
                     Expanded(
                       child: Text(
                         label,
                         textAlign: TextAlign.center,
-                        style: (isSelected ? selectedStyle : unSelectedStyle).apply(overflow: TextOverflow.ellipsis),
+                        style: (isSelected ? selectedStyle : unSelectedStyle)
+                            .apply(overflow: TextOverflow.ellipsis),
                         maxLines: 1,
                       ),
                     ),
                     const SizedBox(width: 16),
-                    const Icon(Icons.close, size: 16),
+                    GestureDetector(
+                      onTap: onTapClose,
+                      child: const Icon(Icons.close, size: 16),
+                    ),
                   ],
                 ),
               ),
             ),
-            hoverGradient(context, onHover, hoverOffset)
+            // hoverGradient(context, onHover, hoverOffset)
           ],
         ),
       ),

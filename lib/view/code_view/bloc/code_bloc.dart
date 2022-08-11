@@ -30,7 +30,6 @@ class CodeBloc extends Bloc<CodeEvent, CodeState> {
     return state.controllerList[index];
   }
 
-
   List<HFile> get fileList {
     return state.controllerList.map((e) => e.file).toList();
   }
@@ -62,7 +61,14 @@ class CodeBloc extends Bloc<CodeEvent, CodeState> {
         list.map((e) => e.file).toList().indexWhere((e) => e == onTappedFile);
     if (index != -1) {
       list.removeAt(index);
-      emit(state.copyWith(state: CodeStatus.success, controllerList: list));
+      final currentIndex = state.index;
+      emit(
+        state.copyWith(
+          state: CodeStatus.success,
+          controllerList: list,
+          index: currentIndex == index ? state.index - 1 : currentIndex,
+        ),
+      );
     }
   }
 }

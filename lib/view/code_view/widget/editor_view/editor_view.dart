@@ -11,7 +11,7 @@ class EditorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      controller: ScrollController(),
+      controller: controller.scrollController,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

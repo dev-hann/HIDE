@@ -10,6 +10,8 @@ class EditorController extends TextEditingController with EquatableMixin {
     Map<String, TextStyle>? syntaxMap,
   })  : syntaxMap = syntaxMap ?? {},
         super(text: File(file.path).readAsStringSync());
+
+  final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
   final Map<String, TextStyle> syntaxMap;
   final HFile file;
