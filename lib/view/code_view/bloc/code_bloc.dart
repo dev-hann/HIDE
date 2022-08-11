@@ -1,6 +1,7 @@
 library code_bloc;
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -57,16 +58,25 @@ class CodeBloc extends Bloc<CodeEvent, CodeState> {
     emit(state.copyWith(state: CodeStatus.loading));
     final onTappedFile = event.file;
     final list = [...state.controllerList];
-    final index =
+    int index =
         list.map((e) => e.file).toList().indexWhere((e) => e == onTappedFile);
+    final isSelected = state.index == index;
     if (index != -1) {
       list.removeAt(index);
-      final currentIndex = state.index;
+      if (list.isEmpty) {
+        index = -1;
+      } else {
+        if (isSelected) {
+          index = max(index - 1, 0);
+        } else {
+          index = state.index-1;
+        }
+      }
       emit(
         state.copyWith(
           state: CodeStatus.success,
           controllerList: list,
-          index: currentIndex == index ? state.index - 1 : currentIndex,
+          index: index,
         ),
       );
     }

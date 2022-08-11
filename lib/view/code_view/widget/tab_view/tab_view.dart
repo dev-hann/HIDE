@@ -31,11 +31,9 @@ class TabView extends StatelessWidget {
         unSelectedStyle: TextStyle(),
         label: file.path.split("/").last,
         onTap: () {
-          print("@@@@");
           onTap(file);
         },
         onTapClose: () {
-          print("@#@#@");
           onTapClose(file);
         },
       ),
