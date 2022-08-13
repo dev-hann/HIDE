@@ -9,7 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:h_ide/model/h_file.dart';
 import 'package:h_ide/model/syntax.dart';
 import 'package:h_ide/repo/code/code_impl.dart';
+import 'package:h_ide/repo/lsp/lsp_impl.dart';
 import 'package:h_ide/use_case/code/code_use_case.dart';
+import 'package:h_ide/use_case/lsp/lsp_use_case.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor_controller.dart';
 
 part 'code_event.dart';
@@ -29,7 +31,7 @@ class CodeBloc extends Bloc<CodeEvent, CodeState> {
   }
 
   final CodeUseCase useCase = CodeUseCase(CodeImpl());
-
+  final LSPUseCase lspUseCase = LSPUseCase(LSPImpl());
   EditorController? get controller {
     final index = state.index;
     if (index == -1) {
@@ -42,7 +44,8 @@ class CodeBloc extends Bloc<CodeEvent, CodeState> {
     return state.controllerList.map((e) => e.file).toList();
   }
 
-  FutureOr<void> _onInit(CodeInitialized event, Emitter<CodeState> emit) {
+  FutureOr<void> _onInit(CodeInitialized event, Emitter<CodeState> emit)async {
+    await lspUseCase.init();
     emit(
       state.copyWith(
         state: CodeStatus.success,

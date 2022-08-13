@@ -12,7 +12,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeState()) {
     on<HomeInitialized>(_onInit);
   }
-
   late WindowUseCase windowUseCase;
   FutureOr<void> _onInit(HomeInitialized event, Emitter<HomeState> emit) async {
     windowUseCase = event.windowUseCase;
