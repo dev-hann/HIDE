@@ -13,7 +13,7 @@ class HomeView extends StatelessWidget {
       percentages: const [0.2, 0.8],
       separatorColor: const Color(grey),
       separatorSize: 2,
-      children:  [
+      children:  const [
         FinderView(),
         CodeView(),
       ],

@@ -14,9 +14,27 @@ class LSPUseCase {
     return repo.stream().map((event) => LSPResponse.fromMap(event));
   }
 
-  void setAnalysisRoots(String filePath) {
+  void serverSetSubscriptions() {
     _send(
-      LSPRequest.analysisSetPriorityFiles(id: "TestID2", fileList: [filePath]),
+      LSPRequest.serverSetSubscriptions(id: "SubID"),
+    );
+  }
+
+  void analysisReAnalyze() {
+    _send(
+      LSPRequest.analysisReAnalyze(id: "TEstID"),
+    );
+  }
+
+  void analysisGetErrors(String filePath) {
+    _send(
+      LSPRequest.analysisGetErrors(id: "TestID", file: filePath),
+    );
+  }
+
+  void setAnalysisRoots(List<String> fileList) {
+    _send(
+      LSPRequest.analysisSetAnalysisRoots(id: "TestID", fileList: fileList),
     );
   }
 

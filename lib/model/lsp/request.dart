@@ -35,4 +35,50 @@ class LSPRequest {
       },
     );
   }
+  factory LSPRequest.analysisGetErrors({
+    required String id,
+    required String file,
+  }) {
+    return LSPRequest(
+      id,
+      "analysis.getErrors",
+      {
+        "file": file,
+      },
+    );
+  }
+  factory LSPRequest.serverSetSubscriptions({
+    required String id,
+  }) {
+    return LSPRequest(
+      id,
+      "server.setSubscriptions",
+      {
+        "subscriptions": ["LOG", "STATUS"],
+      },
+    );
+  }
+  factory LSPRequest.analysisGetHover({
+    required String id,
+    required String file,
+    required int offset,
+  }) {
+    return LSPRequest(
+      id,
+      "analysis.getHover",
+      {
+        "file": file,
+        "offset": offset,
+      },
+    );
+  }
+  factory LSPRequest.analysisReAnalyze({
+    required String id,
+  }) {
+    return LSPRequest(
+      id,
+      "analysis.reanalyze",
+      {},
+    );
+  }
 }
