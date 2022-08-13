@@ -27,11 +27,18 @@ class CodeView extends StatelessWidget {
   Widget codeView({
     required EditorController controller,
     required VoidCallback onTap,
+    required bool readOnly,
+    required Function(RawKeyEvent event) onTapKey,
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: EditorView(
-        controller: controller,
+      child: RawKeyboardListener(
+        onKey: onTapKey,
+        focusNode: FocusNode(),
+        child: EditorView(
+          controller: controller,
+          readOnly: readOnly,
+        ),
       ),
     );
   }
@@ -67,6 +74,14 @@ class CodeView extends StatelessWidget {
             ),
             Expanded(
               child: codeView(
+                onTapKey: (event) {
+                  bloc.add(CodeOnTapKey(
+                    event,
+                    controller.file.path,
+                    controller.selection.baseOffset,
+                  ));
+                },
+                readOnly: state.readOnly,
                 controller: controller,
                 onTap: controller.moveToEnd,
               ),

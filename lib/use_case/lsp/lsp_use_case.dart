@@ -44,6 +44,16 @@ class LSPUseCase {
     );
   }
 
+  void completionGetSuggestions(String filePath, int offset) {
+    _send(
+      LSPRequest.completionGetSuggestions(
+        id: "TestID",
+        file: filePath,
+        offset: offset,
+      ),
+    );
+  }
+
   void _send(LSPRequest request) {
     repo.send(request.toMap());
   }

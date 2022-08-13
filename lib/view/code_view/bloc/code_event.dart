@@ -22,3 +22,13 @@ class CodeFileClosed extends CodeEvent {
   @override
   List<Object?> get props => [file];
 }
+
+class CodeOnTapKey extends CodeEvent {
+  CodeOnTapKey(this.key, this.filePath, this.offset);
+  final RawKeyEvent key;
+  final String filePath;
+  final int offset;
+
+  @override
+  List<Object?> get props => [key, filePath, offset];
+}

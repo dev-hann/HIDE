@@ -5,6 +5,8 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:h_ide/enum/lsp_response_type.dart';
+import 'package:h_ide/model/lsp/response.dart';
 import 'package:h_ide/repo/lsp/lsp_impl.dart';
 import 'package:h_ide/use_case/lsp/lsp_use_case.dart';
 import 'package:h_ide/use_case/window/window_use_case.dart';
@@ -23,7 +25,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> _onInit(HomeInitialized event, Emitter<HomeState> emit) async {
     await lspUseCase.init();
     lspUseCase.stream().listen((event) {
-      print(event.toMap());
+      if(event.type==LSPResponseType.response){
+        final e = event as Response;
+        print(e.result);
+      }
     });
     windowUseCase = event.windowUseCase;
     _loading.complete();

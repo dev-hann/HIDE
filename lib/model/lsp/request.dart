@@ -12,6 +12,20 @@ class LSPRequest {
     };
   }
 
+  factory LSPRequest.completionGetSuggestions({
+    required String id,
+    required String file,
+    required int offset,
+  }) {
+    return LSPRequest(
+      id,
+      "completion.getSuggestions",
+      {
+        "file": file,
+        "offset": offset,
+      },
+    );
+  }
   factory LSPRequest.analysisSetPriorityFiles({
     required String id,
     required List<String> fileList,

@@ -4,11 +4,13 @@ import 'package:h_ide/view/code_view/widget/editor_view/editor_controller.dart';
 import 'package:h_ide/view/code_view/widget/number_view/number_view.dart';
 
 class EditorView extends StatelessWidget {
-  final EditorController controller;
   const EditorView({
     Key? key,
     required this.controller,
+    required this.readOnly,
   }) : super(key: key);
+  final EditorController controller;
+  final bool readOnly;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -20,6 +22,7 @@ class EditorView extends StatelessWidget {
           const SizedBox(width: 8),
           Expanded(
             child: EditableText(
+              readOnly: readOnly,
               scrollController: ScrollController(),
               scrollPhysics: const NeverScrollableScrollPhysics(),
               maxLines: null,
