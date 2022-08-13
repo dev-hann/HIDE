@@ -12,10 +12,12 @@ class CodeState extends Equatable {
     this.state = CodeStatus.init,
     this.controllerList = const [],
     this.index = -1,
+    this.syntaxMap = const {},
   });
   final CodeStatus state;
   final List<EditorController> controllerList;
   final int index;
+  final Map<String, Syntax> syntaxMap;
   @override
   List<Object?> get props => [state, controllerList];
 
@@ -23,11 +25,13 @@ class CodeState extends Equatable {
     CodeStatus? state,
     List<EditorController>? controllerList,
     int? index,
+    Map<String,Syntax>? syntaxMap,
   }) {
     return CodeState(
       state: state ?? this.state,
       controllerList: controllerList ?? this.controllerList,
       index: index ?? this.index,
+      syntaxMap: syntaxMap??this.syntaxMap,
     );
   }
 }

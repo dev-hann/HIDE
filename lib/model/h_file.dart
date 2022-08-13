@@ -20,6 +20,10 @@ class HFile extends Equatable with Comparable<HFile> {
     return type == FileSystemEntityType.file;
   }
 
+  String get extension {
+    return path.split("/").last.split(".").last;
+  }
+
   @override
   List<Object?> get props => [path];
 

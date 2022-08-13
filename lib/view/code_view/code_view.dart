@@ -42,41 +42,38 @@ class CodeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.transparent,
-      child: BlocBuilder<CodeBloc, CodeState>(
-        buildWhen: (pre, curr) {
-          return pre != curr || curr.state == CodeStatus.success;
-        },
-        builder: (context, state) {
-          final bloc = BlocProvider.of<CodeBloc>(context);
-          final controller = bloc.controller;
-          if (controller == null) {
-            return emptyView();
-          }
-          return Column(
-            children: [
-              tabView(
+    return BlocBuilder<CodeBloc, CodeState>(
+      buildWhen: (pre, curr) {
+        return pre != curr || curr.state == CodeStatus.success;
+      },
+      builder: (context, state) {
+        final bloc = BlocProvider.of<CodeBloc>(context);
+        final controller = bloc.controller;
+        if (controller == null) {
+          return emptyView();
+        }
+        return Column(
+          children: [
+            tabView(
+              controller: controller,
+              index: state.index,
+              fileList: bloc.fileList,
+              onTap: (file) {
+                bloc.add(CodeFileOpened(file));
+              },
+              onTapClose: (file) {
+                bloc.add(CodeFileClosed(file));
+              },
+            ),
+            Expanded(
+              child: codeView(
                 controller: controller,
-                index: state.index,
-                fileList: bloc.fileList,
-                onTap: (file) {
-                  bloc.add(CodeFileOpened(file));
-                },
-                onTapClose: (file) {
-                  bloc.add(CodeFileClosed(file));
-                },
+                onTap: controller.moveToEnd,
               ),
-              Expanded(
-                child: codeView(
-                  controller: controller,
-                  onTap: controller.moveToEnd,
-                ),
-              ),
-            ],
-          );
-        },
-      ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

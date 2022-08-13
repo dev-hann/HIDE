@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:h_ide/const/color.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor_controller.dart';
 import 'dart:math' as math;
 
@@ -20,7 +21,13 @@ class NumberView extends StatelessWidget {
             child: Column(
               children: [
                 for (int index = 0; index < length; index++)
-                  Text("${index + 1}"),
+                  Text(
+                    "${index + 1}",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: const Color(grey)),
+                  ),
               ],
             ),
           ),

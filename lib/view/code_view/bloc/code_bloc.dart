@@ -7,6 +7,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:h_ide/model/h_file.dart';
+import 'package:h_ide/model/syntax.dart';
+import 'package:h_ide/repo/code/code_impl.dart';
+import 'package:h_ide/use_case/code/code_use_case.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor_controller.dart';
 
 part 'code_event.dart';
@@ -20,9 +23,13 @@ const syntaxMap = <String, TextStyle>{
 
 class CodeBloc extends Bloc<CodeEvent, CodeState> {
   CodeBloc() : super(const CodeState()) {
+    on<CodeInitialized>(_onInit);
     on<CodeFileOpened>(_onFileOpened);
     on<CodeFileClosed>(_onFileClosed);
   }
+
+  final CodeUseCase useCase = CodeUseCase(CodeImpl());
+
   EditorController? get controller {
     final index = state.index;
     if (index == -1) {
@@ -35,6 +42,15 @@ class CodeBloc extends Bloc<CodeEvent, CodeState> {
     return state.controllerList.map((e) => e.file).toList();
   }
 
+  FutureOr<void> _onInit(CodeInitialized event, Emitter<CodeState> emit) {
+    emit(
+      state.copyWith(
+        state: CodeStatus.success,
+        syntaxMap: useCase.loadSyntax(),
+      ),
+    );
+  }
+
   FutureOr<void> _onFileOpened(
       CodeFileOpened event, Emitter<CodeState> emit) async {
     emit(state.copyWith(state: CodeStatus.loading));
@@ -43,7 +59,10 @@ class CodeBloc extends Bloc<CodeEvent, CodeState> {
     int index =
         list.map((e) => e.file).toList().indexWhere((e) => e == onTappedFile);
     if (index == -1) {
-      final controller = EditorController(file: onTappedFile);
+      final controller = EditorController(
+        file: onTappedFile,
+        syntax: state.syntaxMap[onTappedFile.extension],
+      );
       list.add(controller);
       index = list.length - 1;
     }
@@ -69,7 +88,7 @@ class CodeBloc extends Bloc<CodeEvent, CodeState> {
         if (isSelected) {
           index = max(index - 1, 0);
         } else {
-          index = state.index-1;
+          index = state.index - 1;
         }
       }
       emit(

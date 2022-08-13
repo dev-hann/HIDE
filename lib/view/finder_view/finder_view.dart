@@ -19,18 +19,21 @@ class FinderView extends StatelessWidget {
         return DefaultTextStyle(
           style: Theme.of(context).textTheme.bodyText1!,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("Up a Dir"),
-                Text(path),
-                HFileView(
-                  rootPath: path,
-                  key: ValueKey(path),
-                  fileList: list,
-                ),
-              ],
+            scrollDirection: Axis.horizontal,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Up a Dir"),
+                  Text(path),
+                  HFileView(
+                    rootPath: path,
+                    key: ValueKey(path),
+                    fileList: list,
+                  ),
+                ],
+              ),
             ),
           ),
         );

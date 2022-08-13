@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:h_ide/const/color.dart';
 import 'package:h_ide/model/h_file.dart';
 import 'package:h_ide/view/code_view/bloc/code_bloc.dart';
 import 'package:h_ide/view/finder_view/bloc/finder_bloc.dart';
@@ -21,7 +22,7 @@ class HFileView extends StatelessWidget {
         },
         child: Row(
           children: [
-            const Icon(Icons.file_open),
+            // const Icon(Icons.file_open),
             Text(file.path.replaceAll(rootPath, "")),
           ],
         ),
@@ -31,11 +32,23 @@ class HFileView extends StatelessWidget {
 
   Widget folderView(HFile folder) {
     Widget folderWidget(bool isOpened) {
-      return Row(
-        children: [
-          Icon(isOpened ? Icons.folder_open : Icons.folder),
-          Text("${folder.path.replaceAll(rootPath, "")}/"),
-        ],
+      return Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: isOpened ? "▾" : "▸",
+              style: const TextStyle(
+                color: Color(orange),
+              ),
+            ),
+            TextSpan(
+              text: " ${folder.path.replaceAll(rootPath, "")}/",
+              style: const TextStyle(
+                color: Color(green),
+              ),
+            )
+          ],
+        ),
       );
     }
 
@@ -44,7 +57,7 @@ class HFileView extends StatelessWidget {
         return const SizedBox();
       }
       return Padding(
-        padding: const EdgeInsets.only(left: 16),
+        padding: const EdgeInsets.only(left: 24),
         child: HFileView(
           rootPath: path,
           key: UniqueKey(),

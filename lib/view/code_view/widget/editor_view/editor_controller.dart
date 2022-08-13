@@ -3,17 +3,17 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:h_ide/model/h_file.dart';
+import 'package:h_ide/model/syntax.dart';
 
 class EditorController extends TextEditingController with EquatableMixin {
   EditorController({
     required this.file,
-    Map<String, TextStyle>? syntaxMap,
-  })  : syntaxMap = syntaxMap ?? {},
-        super(text: File(file.path).readAsStringSync());
+    this.syntax,
+  }) : super(text: File(file.path).readAsStringSync());
 
   final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
-  final Map<String, TextStyle> syntaxMap;
+  final Syntax? syntax;
   final HFile file;
   void moveToEnd() {
     focusNode.requestFocus();
@@ -28,13 +28,20 @@ class EditorController extends TextEditingController with EquatableMixin {
   }) {
     final List<TextSpan> list = [];
     final lines = text.split("\n");
+    final linesLen = lines.length;
     final defaultStyle = Theme.of(context).textTheme.bodyText1!;
-    for (final line in lines) {
+    for (int index = 0; index < linesLen; index++) {
+      final line = lines[index];
       final words = line.split(" ");
-
       final List<TextSpan> wordSpanList = [];
       for (final word in words) {
-        TextStyle tmpStyle = syntaxMap[word] ?? defaultStyle;
+        TextStyle tmpStyle = defaultStyle;
+        if (syntax != null) {
+          final color = syntax!.color(word);
+          if (color != null) {
+            tmpStyle = defaultStyle.apply(color: color);
+          }
+        }
         wordSpanList.add(TextSpan(text: word, style: tmpStyle));
         wordSpanList.add(TextSpan(text: ' ', style: tmpStyle));
       }
@@ -45,6 +52,7 @@ class EditorController extends TextEditingController with EquatableMixin {
     list.removeLast();
     return TextSpan(children: list);
   }
+
 
   @override
   List<Object?> get props => [file];
