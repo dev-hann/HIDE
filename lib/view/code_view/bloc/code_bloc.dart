@@ -68,6 +68,7 @@ class CodeBloc extends Bloc<CodeEvent, CodeState> {
       );
       list.add(controller);
       index = list.length - 1;
+      lspUseCase.setPriorityFiles(onTappedFile.path);
     }
     emit(state.copyWith(
       state: CodeStatus.success,

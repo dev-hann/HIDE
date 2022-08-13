@@ -1,0 +1,4 @@
+enum LSPResponseType {
+  response,
+  notification,
+}
