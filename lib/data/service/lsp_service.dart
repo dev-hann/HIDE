@@ -19,8 +19,8 @@ class LSPService {
   }
 
   void send(Map<String, dynamic> data) {
-    final payload = utf8.encode("${json.encode(data)}\n");
-    process.stdin.add(payload);
+    // final payload = utf8.encode("${json.encode(data)}\n");
+    // process.stdin.add(payload);
   }
 
   Future init() async {

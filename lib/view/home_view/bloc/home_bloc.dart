@@ -28,6 +28,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if(event.type==LSPResponseType.response){
         final e = event as Response;
         print(e.result);
+      }else{
+        final e = event as Notification;
+        if(e.event == "completion.results"){
+          final text =e.params["results"].toString(); 
+          print(text.substring(0,10000));
+        }
+        print(e.event);
       }
     });
     windowUseCase = event.windowUseCase;

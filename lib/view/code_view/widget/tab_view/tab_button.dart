@@ -13,7 +13,7 @@ class TabButton extends HButton {
     required this.selectedStyle,
     required this.unSelectedStyle,
     this.padding = const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-    this.height = 40,
+    this.height = 36,
     this.width = 200,
   }) : super(key: key);
   final EdgeInsets padding;
@@ -77,8 +77,7 @@ class TabButton extends HButton {
                 color: buttonColor(onHover),
               ),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Row(
                   children: [
                     Expanded(
