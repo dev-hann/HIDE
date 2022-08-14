@@ -8,12 +8,16 @@ class Editor extends SingleChildRenderObjectWidget {
     required this.controller,
   }) : super(key: key);
   final EditorController controller;
+
   @override
   RenderObject createRenderObject(BuildContext context) {
     return RenderEditor(
-      text: controller.buildTextSpan(context: context, withComposing: true),
+      text: controller.buildTextSpan(context),
     );
   }
+
+  @override
+  void updateRenderObject(BuildContext context, RenderEditor renderObject) {}
 }
 
 class RenderEditor extends RenderBox {
@@ -27,13 +31,8 @@ class RenderEditor extends RenderBox {
 
   final TextPainter _textPainter;
 
-  void _layoutText({double minWidth = 0.0, double maxWidth = double.infinity}) {
-    final double availableMaxWidth = math.max(0.0, maxWidth /*- _caretMargin*/);
-    final double availableMinWidth = math.min(minWidth, availableMaxWidth);
-    _textPainter.layout(
-      minWidth: availableMinWidth,
-      maxWidth: availableMaxWidth,
-    );
+  void _layoutText() {
+    _textPainter.layout();
   }
 
   @override
@@ -41,26 +40,34 @@ class RenderEditor extends RenderBox {
 
   @override
   Size computeDryLayout(BoxConstraints constraints) {
-    print(constraints.biggest);
     _layoutText();
-    /// constraints can get size , determin height
-    return _textPainter.size;
+    final s = constraints.constrainDimensions(
+        constraints.maxWidth, _textPainter.size.height);
+    return s;
   }
 
-  @override
-  void performLayout() {
-    _layoutText();
-    // size = _textPainter.size;
-  }
+  // not supported mouse
+  // @override
+  // bool hitTestSelf(Offset position) {
+  //   print(position);
+  //   return super.hitTestSelf(position);
+  // }
 
   void _paintText(PaintingContext context, Offset offset) {
+    _layoutText();
     _textPainter.paint(context.canvas, offset);
   }
 
-  void _paintCursor(PaintingContext context, Offset offset) {}
+  void _paintCursor(PaintingContext context, Offset offset) {
+    final cursorWidth = 1.0;
+    final cursorHeight = _textPainter.preferredLineHeight;
+    final cursorRect = Rect.fromLTWH(0, 0, cursorWidth, cursorHeight);
+    final paint = Paint()..color = Colors.white;
+    context.canvas.drawRect(cursorRect, paint);
+  }
+
   @override
   void paint(PaintingContext context, Offset offset) {
-    print(size);
     _paintText(context, offset);
     _paintCursor(context, offset);
   }

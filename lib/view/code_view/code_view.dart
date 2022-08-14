@@ -75,11 +75,11 @@ class CodeView extends StatelessWidget {
             Expanded(
               child: codeView(
                 onTapKey: (event) {
-                  bloc.add(CodeOnTapKey(
-                    event,
-                    controller.file.path,
-                    controller.selection.baseOffset,
-                  ));
+                  // bloc.add(CodeOnTapKey(
+                  //   event,
+                  //   controller.file.path,
+                  //   controller.selection.baseOffset,
+                  // ));
                 },
                 readOnly: state.readOnly,
                 controller: controller,

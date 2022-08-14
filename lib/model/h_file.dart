@@ -7,10 +7,14 @@ class HFile extends Equatable with Comparable<HFile> {
     this.path,
   );
   final String path;
+
   FileSystemEntityType get type {
-    final file = File(path);
-    return file.statSync().type;
+    return _file.statSync().type;
   }
+
+  File get _file => File(path);
+
+  String get data => _file.readAsStringSync();
 
   bool get isFolder {
     return type == FileSystemEntityType.directory;
