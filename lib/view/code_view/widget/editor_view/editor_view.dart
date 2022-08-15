@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:h_ide/const/color.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor_controller.dart';
 import 'package:h_ide/view/code_view/widget/number_view/number_view.dart';
@@ -24,21 +23,12 @@ class EditorView extends StatelessWidget {
           Expanded(
             child: Editor(
               controller: controller,
+              focusNode: FocusNode(),
+              style: TextStyle(),
+              cursorColor: Colors.red,
+              backgroundCursorColor: Colors.red,
             ),
           )
-          // Expanded(
-          //   child: EditableText(
-          //     readOnly: readOnly,
-          //     scrollController: ScrollController(),
-          //     scrollPhysics: const NeverScrollableScrollPhysics(),
-          //     maxLines: null,
-          //     controller: controller,
-          //     style: Theme.of(context).textTheme.bodyText1!,
-          //     cursorColor: const Color(white),
-          //     backgroundCursorColor: Colors.transparent,
-          //     focusNode: controller.focusNode,
-          //   ),
-          // ),
         ],
       ),
     );
