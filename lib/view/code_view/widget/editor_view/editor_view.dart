@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:h_ide/view/code_view/widget/editor_view/editor.dart';
+import 'package:h_ide/view/code_view/widget/editor_view/editor/editor.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor_controller.dart';
 import 'package:h_ide/view/code_view/widget/number_view/number_view.dart';
 
@@ -20,14 +20,8 @@ class EditorView extends StatelessWidget {
         children: [
           NumberView(controller: controller),
           const SizedBox(width: 8),
-          Expanded(
-            child: Editor(
-              controller: controller,
-              focusNode: FocusNode(),
-              style: TextStyle(),
-              cursorColor: Colors.red,
-              backgroundCursorColor: Colors.red,
-            ),
+          Editor(
+            controller: controller,
           )
         ],
       ),
