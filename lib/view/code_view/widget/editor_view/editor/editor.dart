@@ -16,10 +16,40 @@ class Editor extends StatefulWidget {
 }
 
 class StateEditor extends State<Editor> {
+  late EditorController _controller;
+  @override
+  void initState() {
+    super.initState();
+    _controller = widget.controller;
+  }
+
+  int _offset = 0;
   @override
   Widget build(BuildContext context) {
-    return RenderEditorWidget(
-        text: widget.controller
-            .buildTextSpan(context: context, withComposing: true));
+    return GestureDetector(
+      onTap: () {
+        print("@#@#@");
+        _controller.focusNode.requestFocus();
+      },
+      child: ColoredBox(
+        color: Colors.transparent,
+        child: Actions(
+          actions: {
+            DirectionalFocusIntent: DirectionalFocusAction.forTextField()
+          },
+          child: Focus(
+            focusNode: _controller.focusNode,
+            child: RenderEditorWidget(
+              text: _controller.buildTextSpan(context),
+              carotOffset: _offset,
+              onChangedCarotOffset: (value) {
+                print(value);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
+

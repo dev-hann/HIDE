@@ -11,28 +11,23 @@ class NumberView extends StatelessWidget {
   final EditorController controller;
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<TextEditingValue>(
-      valueListenable: controller,
-      builder: (context, value, child) {
-        final length = value.text.split("\n").length;
-        return SizedBox(
-          width: math.max(length.toString().length * 10, 30),
-          child: Center(
-            child: Column(
-              children: [
-                for (int index = 0; index < length; index++)
-                  Text(
-                    "${index + 1}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: const Color(grey)),
-                  ),
-              ],
-            ),
-          ),
-        );
-      },
+    final length = controller.text.split("\n").length;
+    return SizedBox(
+      width: math.max(length.toString().length * 10, 30),
+      child: Center(
+        child: Column(
+          children: [
+            for (int index = 0; index < length; index++)
+              Text(
+                "${index + 1}",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: const Color(grey)),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
