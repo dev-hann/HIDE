@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor/render_editor.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor_controller.dart';
@@ -21,30 +22,36 @@ class StateEditor extends State<Editor> {
   void initState() {
     super.initState();
     _controller = widget.controller;
+    _controller.addListener(() {
+      setState(() {});
+    });
   }
 
-  int _offset = 0;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        print("@#@#@");
-        _controller.focusNode.requestFocus();
-      },
-      child: ColoredBox(
-        color: Colors.transparent,
-        child: Actions(
-          actions: {
-            DirectionalFocusIntent: DirectionalFocusAction.forTextField()
-          },
-          child: Focus(
-            focusNode: _controller.focusNode,
-            child: RenderEditorWidget(
-              text: _controller.buildTextSpan(context),
-              carotOffset: _offset,
-              onChangedCarotOffset: (value) {
-                print(value);
-              },
+    return DefaultTextEditingShortcuts(
+      child: GestureDetector(
+        onTap: () {
+          _controller.focusNode.requestFocus();
+        },
+        child: ColoredBox(
+          color: Colors.transparent,
+          child: Actions(
+            actions: {
+              ExtendSelectionByCharacterIntent:
+            },
+            child: Focus(
+              focusNode: _controller.focusNode,
+              child: RenderEditorWidget(
+                text: _controller.buildTextSpan(
+                  context: context,
+                  withComposing: true,
+                ),
+                carotOffset: _controller.value.selection.baseOffset,
+                onChangedCarotOffset: (value) {
+                  print(value);
+                },
+              ),
             ),
           ),
         ),
@@ -53,3 +60,20 @@ class StateEditor extends State<Editor> {
   }
 }
 
+class CustomAction extends Action<ExtendSelectionByCharacterIntent> {
+  CustomAction(this.controller);
+  final EditorController controller;
+
+  void _update(int offset) {
+    controller.selection = TextSelection.collapsed(offset: offset);
+  }
+
+
+  @override
+  void invoke(ExtendSelectionByCharacterIntent intent) {
+    final offset = controller.selection.baseOffset;
+    if(intent.forward){
+      _update(offset+1);
+    }
+  }
+}
