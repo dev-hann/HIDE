@@ -39,6 +39,9 @@ class StateEditor extends State<Editor> {
           child: Actions(
             actions: {
               ExtendSelectionByCharacterIntent:
+                  HorizontalCaretAction(_controller),
+              ExtendSelectionVerticallyToAdjacentLineIntent:
+                  VerticalCaretAction(_controller),
             },
             child: Focus(
               focusNode: _controller.focusNode,
@@ -47,8 +50,8 @@ class StateEditor extends State<Editor> {
                   context: context,
                   withComposing: true,
                 ),
-                carotOffset: _controller.value.selection.baseOffset,
-                onChangedCarotOffset: (value) {
+                caretOffset: _controller.value.selection.baseOffset,
+                onChangedCaretOffset: (value) {
                   print(value);
                 },
               ),
@@ -60,20 +63,51 @@ class StateEditor extends State<Editor> {
   }
 }
 
-class CustomAction extends Action<ExtendSelectionByCharacterIntent> {
-  CustomAction(this.controller);
+class VerticalCaretAction
+    extends Action<ExtendSelectionVerticallyToAdjacentLineIntent> {
+  VerticalCaretAction(this.controller);
+  final EditorController controller;
+  @override
+  void invoke(ExtendSelectionVerticallyToAdjacentLineIntent intent) {
+    final currentLine = controller.caretLineNumber;
+    final maxLine = controller.maxLineNumber;
+    if (intent.forward) {
+      if (currentLine == maxLine) {
+        controller.selection =
+            TextSelection.collapsed(offset: controller.text.length);
+      } else {
+        final currentLineText = controller.lineText(currentLine);
+        final nextLineText = controller.lineText(currentLine+1);
+        final currentOffset = controller.selection.baseOffset;
+
+        controller.selection = controller.selection.extendTo(position);
+      }
+    } else {
+      if (currentLine == 1) {
+        controller.selection = const TextSelection.collapsed(offset: 0);
+      } else {
+        final position = TextPosition(offset: controller.selection.baseOffset);
+        controller.selection = controller.selection.extendTo(position);
+      }
+    }
+  }
+}
+
+class HorizontalCaretAction extends Action<ExtendSelectionByCharacterIntent> {
+  HorizontalCaretAction(this.controller);
   final EditorController controller;
 
   void _update(int offset) {
     controller.selection = TextSelection.collapsed(offset: offset);
   }
 
-
   @override
   void invoke(ExtendSelectionByCharacterIntent intent) {
     final offset = controller.selection.baseOffset;
-    if(intent.forward){
-      _update(offset+1);
+    if (intent.forward) {
+      _update(offset + 1);
+    } else {
+      _update(offset - 1);
     }
   }
 }

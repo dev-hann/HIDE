@@ -5,24 +5,24 @@ class RenderEditorWidget extends SingleChildRenderObjectWidget {
   const RenderEditorWidget({
     Key? key,
     this.text,
-    required this.carotOffset,
-    required this.onChangedCarotOffset,
+    required this.caretOffset,
+    required this.onChangedCaretOffset,
   }) : super(key: key);
   final InlineSpan? text;
-  final int carotOffset;
-  final Function(Offset value) onChangedCarotOffset;
+  final int caretOffset;
+  final Function(Offset value) onChangedCaretOffset;
   @override
   RenderObject createRenderObject(BuildContext context) {
     return RenderEditor(
       text: text,
-      carotOffset: carotOffset,
-      onChangedCarotOffset: onChangedCarotOffset,
+      carotOffset: caretOffset,
+      onChangedCarotOffset: onChangedCaretOffset,
     );
   }
 
   @override
   void updateRenderObject(BuildContext context, RenderEditor renderObject) {
-    renderObject.carotOffset = carotOffset;
+    renderObject.carotOffset = caretOffset;
   }
 }
 

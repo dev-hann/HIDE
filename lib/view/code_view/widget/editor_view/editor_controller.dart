@@ -13,17 +13,18 @@ class EditorController extends TextEditingController with EquatableMixin {
   final Syntax? syntax;
   final HFile file;
 
-
-
-  int get cursorLineNumber {
+  int get caretLineNumber {
     return text.substring(0, selection.baseOffset).split("\n").length;
   }
 
+  int get maxLineNumber {
+    return text.split("\n").length;
+  }
+
   String? lineText(int line) {
-    EditableText();
     try {
       final list = text.split("\n");
-      return list[line-1];
+      return list[line - 1];
     } catch (e) {
       return null;
     }
