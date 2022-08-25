@@ -52,7 +52,7 @@ class StateEditor extends State<Editor> {
                 ),
                 caretOffset: _controller.value.selection.baseOffset,
                 onChangedCaretOffset: (value) {
-                  print(value);
+                  // print(value);
                 },
               ),
             ),
@@ -67,27 +67,49 @@ class VerticalCaretAction
     extends Action<ExtendSelectionVerticallyToAdjacentLineIntent> {
   VerticalCaretAction(this.controller);
   final EditorController controller;
+
+  // TODO : Need Optimize!
   @override
   void invoke(ExtendSelectionVerticallyToAdjacentLineIntent intent) {
     final currentLine = controller.caretLineNumber;
+    final currentLineText = controller.lineText(currentLine);
     final maxLine = controller.maxLineNumber;
     if (intent.forward) {
       if (currentLine == maxLine) {
         controller.selection =
             TextSelection.collapsed(offset: controller.text.length);
       } else {
-        final currentLineText = controller.lineText(currentLine);
-        final nextLineText = controller.lineText(currentLine+1);
-        final currentOffset = controller.selection.baseOffset;
-
-        controller.selection = controller.selection.extendTo(position);
+        int textLength = 0;
+        for (int index = 0; index < currentLine; index++) {
+          textLength += controller.lineText(index).length;
+          textLength++;
+        }
+        final nomalizedOffset = controller.selection.baseOffset - textLength;
+        final leftLineOffset = currentLineText.length - nomalizedOffset;
+        controller.selection = TextSelection.collapsed(
+            offset: controller.selection.baseOffset + leftLineOffset);
+        final nextLineCaretOffset = math.min(
+            nomalizedOffset + 1, controller.lineText(currentLine + 1).length);
+        controller.selection = TextSelection.collapsed(
+            offset: controller.selection.baseOffset + nextLineCaretOffset);
       }
     } else {
       if (currentLine == 1) {
         controller.selection = const TextSelection.collapsed(offset: 0);
       } else {
-        final position = TextPosition(offset: controller.selection.baseOffset);
-        controller.selection = controller.selection.extendTo(position);
+        int textLength = 0;
+        for (int index = 0; index < currentLine; index++) {
+          textLength += controller.lineText(index).length;
+          textLength++;
+        }
+        final nomalizedOffset = controller.selection.baseOffset - textLength;
+        final leftLineOffset = currentLineText.length - nomalizedOffset;
+        controller.selection = TextSelection.collapsed(
+            offset: textLength);
+        // final beforeLineCaretOffset = math.min(
+        //     controller.lineText(currentLine - 1).length, nomalizedOffset);
+        // controller.selection = TextSelection.collapsed(
+        //     offset: controller.selection.baseOffset - beforeLineCaretOffset);
       }
     }
   }
@@ -107,7 +129,9 @@ class HorizontalCaretAction extends Action<ExtendSelectionByCharacterIntent> {
     if (intent.forward) {
       _update(offset + 1);
     } else {
-      _update(offset - 1);
+      if (offset != 0) {
+        _update(offset - 1);
+      }
     }
   }
 }

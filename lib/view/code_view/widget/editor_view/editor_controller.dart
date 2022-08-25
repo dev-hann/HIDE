@@ -7,7 +7,9 @@ class EditorController extends TextEditingController with EquatableMixin {
   EditorController({
     required this.file,
     this.syntax,
-  }) : super(text: file.data);
+  }) : super(text: file.data) {
+    selection = const TextSelection.collapsed(offset: 0);
+  }
   final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
   final Syntax? syntax;
@@ -21,12 +23,12 @@ class EditorController extends TextEditingController with EquatableMixin {
     return text.split("\n").length;
   }
 
-  String? lineText(int line) {
+  String lineText(int line) {
     try {
       final list = text.split("\n");
       return list[line - 1];
     } catch (e) {
-      return null;
+      return "";
     }
   }
 
