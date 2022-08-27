@@ -103,13 +103,15 @@ class VerticalCaretAction
           textLength++;
         }
         final nomalizedOffset = controller.selection.baseOffset - textLength;
-        final leftLineOffset = currentLineText.length - nomalizedOffset;
+        final beforeLineText = controller.lineText(currentLine - 1);
+        controller.selection = TextSelection.collapsed(offset: textLength - 1);
         controller.selection = TextSelection.collapsed(
-            offset: textLength);
-        // final beforeLineCaretOffset = math.min(
-        //     controller.lineText(currentLine - 1).length, nomalizedOffset);
-        // controller.selection = TextSelection.collapsed(
-        //     offset: controller.selection.baseOffset - beforeLineCaretOffset);
+          offset: controller.selection.baseOffset -
+              beforeLineText.length -
+              1 +
+              1 +
+              (math.min(beforeLineText.length - 1, nomalizedOffset)),
+        );
       }
     }
   }
