@@ -67,7 +67,7 @@ class EditorController extends TextEditingController with EquatableMixin {
       list.add(TextSpan(text: "\n", style: defaultStyle));
     }
     list.removeLast();
-    return TextSpan(children: list);
+    return TextSpan(children: list,style: defaultStyle);
   }
 
   @override

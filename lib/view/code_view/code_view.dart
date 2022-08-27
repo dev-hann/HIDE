@@ -32,13 +32,10 @@ class CodeView extends StatelessWidget {
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: RawKeyboardListener(
-        onKey: onTapKey,
-        focusNode: FocusNode(),
-        child: EditorView(
-          controller: controller,
-          readOnly: readOnly,
-        ),
+      child: EditorView(
+        key: UniqueKey(),
+        controller: controller,
+        readOnly: readOnly,
       ),
     );
   }

@@ -22,7 +22,9 @@ class RenderEditorWidget extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(BuildContext context, RenderEditor renderObject) {
-    renderObject.carotOffset = caretOffset;
+    renderObject
+      ..carotOffset = caretOffset
+      ..text = text;
   }
 }
 
@@ -50,7 +52,19 @@ class RenderEditor extends RenderBox {
     markNeedsPaint();
   }
 
-  final TextPainter _textPainter;
+  set text(InlineSpan? text) {
+    if (_textPainter.text == text) {
+      return;
+    }
+    _textPainter = TextPainter(
+      text: text,
+      textAlign: TextAlign.start,
+      textDirection: TextDirection.ltr,
+    );
+    markNeedsPaint();
+  }
+
+  late TextPainter _textPainter;
   double get lineHeight => _textPainter.preferredLineHeight + 2;
   void _layoutText({double minWidth = 0.0, double maxWidth = double.infinity}) {
     final double availableMaxWidth = math.max(0.0, maxWidth /*- _caretMargin*/);
@@ -74,10 +88,11 @@ class RenderEditor extends RenderBox {
     _textPainter.paint(context.canvas, offset);
   }
 
+  late Offset caretOffset = Offset.zero;
   void _paintCursor(PaintingContext context, Offset offset) {
     final position = TextPosition(offset: carotOffset);
     final rect = Rect.fromLTWH(0, 0, 2, lineHeight);
-    final caretOffset = _textPainter.getOffsetForCaret(position, rect);
+    caretOffset = _textPainter.getOffsetForCaret(position, rect);
     onChangedCarotOffset(caretOffset);
     final paint = Paint()..color = Colors.red;
     final carrotRect = Rect.fromLTWH(
@@ -91,14 +106,31 @@ class RenderEditor extends RenderBox {
 
   void _paintRuler(PaintingContext context, Offset offset) {
     final paint = Paint()..color = Colors.white.withOpacity(0.1);
+    // TODO: fix width
     context.canvas
-        .drawRect(Rect.fromLTWH(0, 1, size.width * 100, lineHeight), paint);
+        .drawRect(Rect.fromLTWH(0, caretOffset.dy, size.width * 100, lineHeight), paint);
+  }
+
+  void _paintNumber(PaintingContext context, Offset offset) {
+    final lineNumber = _textPainter.computeLineMetrics().length;
+    final TextPainter tp = TextPainter(
+      text: TextSpan(
+        text: List.generate(lineNumber, (index) => " $index\n ").join(),
+        style: _textPainter.text!.style,
+      ),
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.end,
+    );
+    tp.layout();
+    tp.paint(context.canvas, offset);
   }
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    _paintText(context, offset);
-    _paintCursor(context, offset);
+    _paintNumber(context, offset);
+    Offset editorOffset = offset.translate(50, 0);
+    _paintText(context, editorOffset);
+    _paintCursor(context, editorOffset);
     _paintRuler(context, offset);
   }
 }

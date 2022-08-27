@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor/editor.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor_controller.dart';
-import 'package:h_ide/view/code_view/widget/number_view/number_view.dart';
 
 class EditorView extends StatelessWidget {
   const EditorView({
@@ -18,8 +17,8 @@ class EditorView extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          NumberView(controller: controller),
-          const SizedBox(width: 8),
+          // NumberView(controller: controller),
+          // const SizedBox(width: 8),
           Editor(
             controller: controller,
           )
