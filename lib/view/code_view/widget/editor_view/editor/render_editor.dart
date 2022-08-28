@@ -7,22 +7,26 @@ class RenderEditorWidget extends SingleChildRenderObjectWidget {
     this.text,
     required this.caretOffset,
     required this.onChangedCaretOffset,
+    required this.insertMode,
   }) : super(key: key);
   final InlineSpan? text;
   final int caretOffset;
   final Function(Offset value) onChangedCaretOffset;
+  final bool insertMode;
   @override
   RenderObject createRenderObject(BuildContext context) {
     return RenderEditor(
       text: text,
       carotOffset: caretOffset,
       onChangedCarotOffset: onChangedCaretOffset,
+      insertMode: insertMode,
     );
   }
 
   @override
   void updateRenderObject(BuildContext context, RenderEditor renderObject) {
     renderObject
+      ..insertMode = insertMode
       ..carotOffset = caretOffset
       ..text = text;
   }
@@ -32,13 +36,25 @@ class RenderEditor extends RenderBox {
   RenderEditor({
     InlineSpan? text,
     required int carotOffset,
+    required bool insertMode,
     required this.onChangedCarotOffset,
-  })  : _carotOffset = carotOffset,
+  })  : _insertMode = insertMode,
+        _carotOffset = carotOffset,
         _textPainter = TextPainter(
           text: text,
           textAlign: TextAlign.start,
           textDirection: TextDirection.ltr,
         );
+
+  late bool _insertMode;
+  bool get insertMode => _insertMode;
+  set insertMode(bool value) {
+    if (_insertMode == value) {
+      return;
+    }
+    _insertMode = value;
+    markNeedsPaint();
+  }
 
   final Function(Offset value) onChangedCarotOffset;
 
@@ -91,7 +107,10 @@ class RenderEditor extends RenderBox {
   late Offset caretOffset = Offset.zero;
   void _paintCursor(PaintingContext context, Offset offset) {
     final position = TextPosition(offset: carotOffset);
-    final rect = Rect.fromLTWH(0, 0, 2, lineHeight);
+    // get char width!.
+    print(_textPainter.text!.style);
+    final double caretWidth = insertMode ? 2 : 8;
+    final rect = Rect.fromLTWH(0, 0, caretWidth, lineHeight);
     caretOffset = _textPainter.getOffsetForCaret(position, rect);
     onChangedCarotOffset(caretOffset);
     final paint = Paint()..color = Colors.red;
@@ -107,8 +126,8 @@ class RenderEditor extends RenderBox {
   void _paintRuler(PaintingContext context, Offset offset) {
     final paint = Paint()..color = Colors.white.withOpacity(0.1);
     // TODO: fix width
-    context.canvas
-        .drawRect(Rect.fromLTWH(0, caretOffset.dy, size.width * 100, lineHeight), paint);
+    context.canvas.drawRect(
+        Rect.fromLTWH(0, caretOffset.dy, size.width * 100, lineHeight), paint);
   }
 
   void _paintNumber(PaintingContext context, Offset offset) {

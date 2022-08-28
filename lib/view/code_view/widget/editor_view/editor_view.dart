@@ -14,16 +14,7 @@ class EditorView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       controller: controller.scrollController,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // NumberView(controller: controller),
-          // const SizedBox(width: 8),
-          Editor(
-            controller: controller,
-          )
-        ],
-      ),
+      child: Editor(controller: controller),
     );
   }
 }

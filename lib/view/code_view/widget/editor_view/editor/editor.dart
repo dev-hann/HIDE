@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor/render_editor.dart';
 import 'package:h_ide/view/code_view/widget/editor_view/editor_controller.dart';
 
@@ -18,6 +19,7 @@ class Editor extends StatefulWidget {
 
 class StateEditor extends State<Editor> {
   late EditorController _controller;
+  final ValueNotifier<bool> _modeNotifier = ValueNotifier(false);
   @override
   void initState() {
     super.initState();
@@ -29,7 +31,22 @@ class StateEditor extends State<Editor> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTextEditingShortcuts(
+    return Shortcuts(
+      shortcuts: const {
+        SingleActivator(LogicalKeyboardKey.escape): ModeIntent(),
+        SingleActivator(LogicalKeyboardKey.arrowLeft):
+            ExtendSelectionByCharacterIntent(
+                forward: false, collapseSelection: true),
+        SingleActivator(LogicalKeyboardKey.arrowRight):
+            ExtendSelectionByCharacterIntent(
+                forward: true, collapseSelection: true),
+        SingleActivator(LogicalKeyboardKey.arrowUp):
+            ExtendSelectionVerticallyToAdjacentLineIntent(
+                forward: false, collapseSelection: true),
+        SingleActivator(LogicalKeyboardKey.arrowDown):
+            ExtendSelectionVerticallyToAdjacentLineIntent(
+                forward: true, collapseSelection: true),
+      },
       child: GestureDetector(
         onTap: () {
           _controller.focusNode.requestFocus();
@@ -38,6 +55,7 @@ class StateEditor extends State<Editor> {
           color: Colors.transparent,
           child: Actions(
             actions: {
+              ModeIntent: ModeAction(_modeNotifier),
               ExtendSelectionByCharacterIntent:
                   HorizontalCaretAction(_controller),
               ExtendSelectionVerticallyToAdjacentLineIntent:
@@ -45,22 +63,41 @@ class StateEditor extends State<Editor> {
             },
             child: Focus(
               focusNode: _controller.focusNode,
-              child: RenderEditorWidget(
-                text: _controller.buildTextSpan(
-                  context: context,
-                  withComposing: true,
-                ),
-                caretOffset: _controller.value.selection.baseOffset,
-                onChangedCaretOffset: (value) {
-                  // print(value);
-                },
-              ),
+              child: ValueListenableBuilder<bool>(
+                  valueListenable: _modeNotifier,
+                  builder: (context, insertMode, _) {
+                    return RenderEditorWidget(
+                      text: _controller.buildTextSpan(
+                        context: context,
+                        withComposing: true,
+                      ),
+                      caretOffset: _controller.value.selection.baseOffset,
+                      insertMode: insertMode,
+                      onChangedCaretOffset: (value) {
+                        // print(value);
+                      },
+                    );
+                  }),
             ),
           ),
         ),
       ),
     );
   }
+}
+
+class ModeAction extends Action<ModeIntent> {
+  ModeAction(this.modeNotifier);
+  final ValueNotifier<bool> modeNotifier;
+
+  @override
+  void invoke(ModeIntent intent) {
+    modeNotifier.value = !modeNotifier.value;
+  }
+}
+
+class ModeIntent extends Intent {
+  const ModeIntent();
 }
 
 class VerticalCaretAction

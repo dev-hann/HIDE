@@ -57,6 +57,7 @@ class CodeView extends StatelessWidget {
           return emptyView();
         }
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             tabView(
               controller: controller,
