@@ -12,9 +12,6 @@ class EditorView extends StatelessWidget {
   final bool readOnly;
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      controller: controller.scrollController,
-      child: Editor(controller: controller),
-    );
+    return Editor(controller: controller);
   }
 }

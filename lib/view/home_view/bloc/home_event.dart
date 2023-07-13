@@ -1,15 +1,8 @@
-part of home_bloc;
+part of 'home_bloc.dart';
 
-abstract class HomeEvent {}
+abstract class HomeEvent extends Equatable {
+  const HomeEvent();
 
-class HomeInitialized extends HomeEvent {
-  HomeInitialized(this.windowUseCase);
-  final WindowUseCase windowUseCase;
+  @override
+  List<Object> get props => [];
 }
-
-class HomeAnalysisdRoots extends HomeEvent {
-  HomeAnalysisdRoots(this.filePath);
-  final String filePath;
-}
-
-

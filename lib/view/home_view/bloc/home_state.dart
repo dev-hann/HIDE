@@ -1,19 +1,8 @@
-part of home_bloc;
+part of 'home_bloc.dart';
 
 class HomeState extends Equatable {
-  const HomeState({
-    this.rootPath = "",
-  });
-  final String rootPath;
+  const HomeState();
 
   @override
-  List<Object?> get props => [rootPath];
-
-  HomeState copyWith({
-    String? rootPath,
-  }) {
-    return HomeState(
-      rootPath: rootPath ?? this.rootPath,
-    );
-  }
+  List<Object> get props => [];
 }

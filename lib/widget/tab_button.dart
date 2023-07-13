@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:h_ide/model/h_file.dart';
 import 'package:h_ide/widget/h_button.dart';
 
-class TabButton extends HButton {
-  const TabButton({
+class HTabButton extends HButton {
+  const HTabButton({
     Key? key,
-    required this.label,
+    required this.file,
     required this.isSelected,
     required super.onTap,
     required this.onTapClose,
@@ -19,7 +20,7 @@ class TabButton extends HButton {
   final EdgeInsets padding;
   final double width;
   final double height;
-  final String label;
+  final HFile file;
   final bool isSelected;
   final Color unSelectedColor;
   final Color selectedColor;
@@ -82,7 +83,7 @@ class TabButton extends HButton {
                   children: [
                     Expanded(
                       child: Text(
-                        label,
+                        file.name,
                         textAlign: TextAlign.center,
                         style: (isSelected ? selectedStyle : unSelectedStyle)
                             .apply(overflow: TextOverflow.ellipsis),

@@ -2,10 +2,8 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 
-class HFile extends Equatable with Comparable<HFile> {
-  const HFile(
-    this.path,
-  );
+class HFile extends Equatable implements Comparable<HFile> {
+  const HFile(this.path);
   final String path;
 
   FileSystemEntityType get type {
@@ -26,6 +24,19 @@ class HFile extends Equatable with Comparable<HFile> {
 
   String get extension {
     return path.split("/").last.split(".").last;
+  }
+
+  List<HFile> get children {
+    if (isBinary) {
+      return [];
+    }
+    final directory = Directory(path);
+    final list = directory.listSync().map((item) => item.path).toList();
+    return list.map((e) => HFile(e)).toList();
+  }
+
+  String get name {
+    return _file.path.split("/").last;
   }
 
   @override

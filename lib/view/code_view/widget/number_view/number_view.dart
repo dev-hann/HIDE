@@ -22,8 +22,8 @@ class NumberView extends StatelessWidget {
                 "${index + 1}",
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1!
-                    .copyWith(color: const Color(grey)),
+                    .bodyLarge!
+                    .copyWith(color: HColor.grey),
               ),
           ],
         ),

@@ -46,7 +46,7 @@ class EditorController extends TextEditingController with EquatableMixin {
     final List<TextSpan> list = [];
     final lines = text.split("\n");
     final linesLen = lines.length;
-    final defaultStyle = Theme.of(context).textTheme.bodyText1!;
+    final defaultStyle = Theme.of(context).textTheme.bodyLarge!;
     for (int index = 0; index < linesLen; index++) {
       final line = lines[index];
       final words = line.split(" ");
@@ -67,7 +67,7 @@ class EditorController extends TextEditingController with EquatableMixin {
       list.add(TextSpan(text: "\n", style: defaultStyle));
     }
     list.removeLast();
-    return TextSpan(children: list,style: defaultStyle);
+    return TextSpan(children: list, style: defaultStyle);
   }
 
   @override
