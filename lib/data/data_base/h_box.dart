@@ -5,7 +5,10 @@ abstract class HBox {
   late Box box;
 
   Future openBox() async {
-    box = await Hive.openBox(name);
+    box = await Hive.openBox(
+      name,
+      // path: "",
+    );
   }
 
   Future clearBox() async {

@@ -16,8 +16,10 @@ dependencies:
   window_manager: ^0.3.5
   hive:
   hive_flutter:
-  google_fonts: ^5.1.0
   yaml: ^3.1.1
+
+  xterm: ^3.5.0
+  flutter_pty: ^0.4.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -25,3 +27,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  fonts:
+    - family: "Hack"
+      fonts:
+        - asset: "asset/hack_mono.ttf"

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:h_ide/const/color.dart';
 import 'package:h_ide/data/data_base/h_box.dart';
 import 'package:h_ide/util/window.dart';
-import 'package:h_ide/view/code_view/bloc/code_bloc.dart';
 import 'package:h_ide/view/finder_view/bloc/finder_bloc.dart';
 import 'package:h_ide/view/home_view/bloc/home_bloc.dart';
 import 'package:h_ide/view/home_view/home_view.dart';
@@ -18,8 +16,11 @@ void main() async {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: "Hack",
         scaffoldBackgroundColor: HColor.black,
-        textTheme: GoogleFonts.robotoMonoTextTheme().apply(
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontSize: 13),
+        ).apply(
           displayColor: HColor.white,
           bodyColor: HColor.white,
         ),
@@ -31,9 +32,6 @@ void main() async {
           ),
           BlocProvider(
             create: (_) => FinderBloc(),
-          ),
-          BlocProvider(
-            create: (_) => CodeBloc(),
           ),
           BlocProvider(
             create: (_) => PanelBloc(),

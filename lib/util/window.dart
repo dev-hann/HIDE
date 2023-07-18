@@ -16,7 +16,7 @@ class Window {
       skipTaskbar: false,
       titleBarStyle: TitleBarStyle.hidden,
     );
-    await windowManager.waitUntilReadyToShow(windowOptions, () async {
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.maximize();
       await windowManager.show();
       await windowManager.focus();

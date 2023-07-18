@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:h_ide/model/h_file.dart';
+import 'package:h_ide/widget/editor/editor.dart';
 
 part 'panel_event.dart';
 part 'panel_state.dart';
@@ -17,14 +18,16 @@ class PanelBloc extends Bloc<PanelEvent, PanelState> {
   FutureOr<void> _onInit(PanelEventInited event, Emitter<PanelState> emit) {
     emit(
       state.copyWith(
-        controllerMap: {},
+        pageController: PageController(),
+        editorMap: {},
       ),
     );
   }
 
-  FutureOr<void> _onOpenFile(
-      PanelEventOpenFile event, Emitter<PanelState> emit) {
-    final list = state.fileList;
+  Future<FutureOr<void>> _onOpenFile(
+      PanelEventOpenFile event, Emitter<PanelState> emit) async {
+    final Map<HFile, HEditor> map = {...state.editorMap};
+    final list = map.keys.toList();
     final file = event.file;
     final index = list.indexOf(file);
     if (index != -1) {
@@ -34,33 +37,42 @@ class PanelBloc extends Bloc<PanelEvent, PanelState> {
         ),
       );
     } else {
+      map[file] = HEditor(file: file);
       emit(
         state.copyWith(
           selectedIndex: list.length,
-          fileList: [...list, event.file],
+          editorMap: map,
         ),
       );
     }
+    final pageController = state.pageController;
+    if (pageController?.hasClients ?? false) {
+      pageController?.jumpToPage(state.selectedIndex);
+    }
   }
 
-  FutureOr<void> _onCloseFile(
-      PanelEventCloseFile event, Emitter<PanelState> emit) {
-    final list = state.fileList;
+  Future<FutureOr<void>> _onCloseFile(
+      PanelEventCloseFile event, Emitter<PanelState> emit) async {
+    final Map<HFile, HEditor> map = {...state.editorMap};
     final file = event.file;
-    list.remove(file);
+    map.remove(file);
     int selectedIndex = state.selectedIndex;
-    if (list.isEmpty) {
+    if (map.isEmpty) {
       selectedIndex = -1;
     }
-    if (list.length == state.selectedIndex) {
-      selectedIndex = list.length - 1;
+    if (map.length == state.selectedIndex) {
+      selectedIndex = map.length - 1;
     }
 
     emit(
       state.copyWith(
         selectedIndex: selectedIndex,
-        fileList: [...list],
+        editorMap: map,
       ),
     );
+    final pageController = state.pageController;
+    if (pageController?.hasClients ?? false) {
+      pageController?.jumpToPage(state.selectedIndex);
+    }
   }
 }

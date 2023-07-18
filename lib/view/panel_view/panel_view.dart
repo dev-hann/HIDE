@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:h_ide/view/panel_view/bloc/panel_bloc.dart';
-import 'package:h_ide/view/tab_view/tab_view.dart';
+import 'package:h_ide/widget/tab.dart';
 
 class PanelView extends StatefulWidget {
   const PanelView({super.key});
@@ -19,33 +19,42 @@ class _PanelViewState extends State<PanelView> {
     bloc.add(PanelEventInited());
   }
 
+  Widget emptyView() {
+    return const Center(
+      child: Text("HIDE"),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PanelBloc, PanelState>(
       builder: (context, state) {
-        final fileList = state.fileList;
+        final fileList = state.editorMap.keys.toList();
+        final selectedIndex = state.selectedIndex;
+        if (fileList.isEmpty) {
+          return emptyView();
+        }
         return Column(
           children: [
-            TabView(
+            HTab(
               fileList: fileList,
-              selectedIndex: state.selectedIndex,
-              onTap: (file) {
+              selectedIndex: selectedIndex,
+              onTap: (index) {
                 bloc.add(
-                  PanelEventOpenFile(file),
+                  PanelEventOpenFile(fileList[index]),
                 );
               },
-              onTapClose: (file) {
+              onTapClose: (index) {
                 bloc.add(
-                  PanelEventCloseFile(file),
+                  PanelEventCloseFile(fileList[index]),
                 );
               },
             ),
             Expanded(
-              child: TextField(
-                controller: state.controller,
-                expands: true,
-                maxLines: null,
-                minLines: null,
+              child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: state.pageController,
+                children: state.editorMap.values.toList(),
               ),
             ),
           ],

@@ -1,40 +1,15 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:h_ide/model/h_file.dart';
 import 'package:h_ide/model/syntax.dart';
 
-class EditorController extends TextEditingController with EquatableMixin {
-  EditorController({
-    required this.file,
+class CodeEditorController extends TextEditingController {
+  CodeEditorController({
+    required String text,
     this.syntax,
-  }) : super(text: file.data) {
-    selection = const TextSelection.collapsed(offset: 0);
-  }
-  final ScrollController scrollController = ScrollController();
-  final FocusNode focusNode = FocusNode();
+  }) : super(text: text);
   final Syntax? syntax;
-  final HFile file;
 
-  int get caretLineNumber {
-    return text.substring(0, selection.baseOffset).split("\n").length;
-  }
-
-  int get maxLineNumber {
+  int get lines {
     return text.split("\n").length;
-  }
-
-  String lineText(int line) {
-    try {
-      final list = text.split("\n");
-      return list[line - 1];
-    } catch (e) {
-      return "";
-    }
-  }
-
-  void moveToEnd() {
-    // focusNode.requestFocus();
-    // selection = TextSelection.collapsed(offset: text.length);
   }
 
   @override
@@ -69,7 +44,4 @@ class EditorController extends TextEditingController with EquatableMixin {
     list.removeLast();
     return TextSpan(children: list, style: defaultStyle);
   }
-
-  @override
-  List<Object?> get props => [file];
 }

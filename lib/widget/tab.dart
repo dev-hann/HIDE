@@ -1,11 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:h_ide/const/color.dart';
 import 'package:h_ide/model/h_file.dart';
 import 'package:h_ide/widget/h_button.dart';
+
+class HTab extends StatelessWidget {
+  const HTab({
+    super.key,
+    required this.fileList,
+    required this.selectedIndex,
+    required this.onTap,
+    required this.onTapClose,
+  });
+  final List<HFile> fileList;
+  final int selectedIndex;
+  final Function(int index) onTap;
+  final Function(int index) onTapClose;
+
+  Widget item(int index) {
+    final file = fileList[index];
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Center(
+        child: DefaultTextStyle(
+          style: const TextStyle(color: Colors.white),
+          child: HTabButton(
+            isSelected: selectedIndex == index,
+            selectedColor: HColor.grey.withOpacity(0.5),
+            unSelectedColor: HColor.black,
+            selectedStyle: const TextStyle(
+              color: HColor.white,
+              fontWeight: FontWeight.w600,
+            ),
+            unSelectedStyle: const TextStyle(color: HColor.white),
+            name: file.name,
+            onTap: () {
+              onTap(index);
+            },
+            onTapClose: () {
+              onTapClose(index);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            for (int index = 0; index < fileList.length; index++) item(index),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class HTabButton extends HButton {
   const HTabButton({
     Key? key,
-    required this.file,
+    required this.name,
     required this.isSelected,
     required super.onTap,
     required this.onTapClose,
@@ -20,7 +79,7 @@ class HTabButton extends HButton {
   final EdgeInsets padding;
   final double width;
   final double height;
-  final HFile file;
+  final String name;
   final bool isSelected;
   final Color unSelectedColor;
   final Color selectedColor;
@@ -83,7 +142,7 @@ class HTabButton extends HButton {
                   children: [
                     Expanded(
                       child: Text(
-                        file.name,
+                        name,
                         textAlign: TextAlign.center,
                         style: (isSelected ? selectedStyle : unSelectedStyle)
                             .apply(overflow: TextOverflow.ellipsis),

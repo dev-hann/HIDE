@@ -35,9 +35,7 @@ class _FinderViewState extends State<FinderView> {
         child: Row(
           children: [
             // const Icon(Icons.file_open),
-            Text(
-              file.name,
-            ),
+            Text(file.name),
           ],
         ),
       );
