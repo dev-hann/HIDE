@@ -2,28 +2,36 @@ part of 'panel_bloc.dart';
 
 class PanelState extends Equatable {
   const PanelState({
-    this.selectedIndex = -1,
-    this.editorMap = const {},
+    this.selectedFile,
+    this.fileList = const [],
     this.pageController,
   });
-  final int selectedIndex;
-  final Map<HFile, HEditor> editorMap;
+  final HFile? selectedFile;
+  final List<HFile> fileList;
   final PageController? pageController;
+
+  int get selectedIndex {
+    if (selectedFile == null) {
+      return -1;
+    }
+    return fileList.indexWhere((element) => element.path == selectedFile!.path);
+  }
 
   @override
   List<Object?> get props => [
-        selectedIndex,
+        selectedFile,
         pageController,
+        fileList.hashCode,
       ];
 
   PanelState copyWith({
-    int? selectedIndex,
-    Map<HFile, HEditor>? editorMap,
+    HFile? selectedFile,
+    List<HFile>? fileList,
     PageController? pageController,
   }) {
     return PanelState(
-      selectedIndex: selectedIndex ?? this.selectedIndex,
-      editorMap: editorMap ?? this.editorMap,
+      selectedFile: selectedFile ?? this.selectedFile,
+      fileList: fileList ?? this.fileList,
       pageController: pageController ?? this.pageController,
     );
   }

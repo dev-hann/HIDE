@@ -19,7 +19,9 @@ void main() async {
         fontFamily: "Hack",
         scaffoldBackgroundColor: HColor.black,
         textTheme: const TextTheme(
-          bodyLarge: TextStyle(fontSize: 13),
+          bodyLarge: TextStyle(
+            fontSize: 13,
+          ),
         ).apply(
           displayColor: HColor.white,
           bodyColor: HColor.white,

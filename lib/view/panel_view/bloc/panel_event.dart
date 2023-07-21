@@ -24,3 +24,11 @@ class PanelEventCloseFile extends PanelEvent {
   @override
   List<Object?> get props => [file];
 }
+
+class PanelEventUpdateFile extends PanelEvent {
+  const PanelEventUpdateFile(this.file);
+  final HFile file;
+
+  @override
+  List<Object?> get props => [file];
+}

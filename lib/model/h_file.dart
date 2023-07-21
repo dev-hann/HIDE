@@ -3,8 +3,12 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 
 class HFile extends Equatable implements Comparable<HFile> {
-  const HFile(this.path);
+  const HFile(
+    this.path, {
+    this.isModified = false,
+  });
   final String path;
+  final bool isModified;
 
   Stream<FileSystemEvent> get stream {
     return _file.watch();
@@ -34,17 +38,15 @@ class HFile extends Equatable implements Comparable<HFile> {
     return name.split(".").last.toLowerCase();
   }
 
-  List<HFile> get children {
-    if (isBinary) {
-      return [];
-    }
-    final directory = Directory(path);
-    final list = directory.listSync().map((item) => item.path).toList();
-    return list.map((e) => HFile(e)).toList();
+  Future write(String data) {
+    return _file.writeAsString(data);
   }
 
   @override
-  List<Object?> get props => [path];
+  List<Object?> get props => [
+        path,
+        isModified,
+      ];
 
   @override
   int compareTo(HFile other) {
@@ -54,16 +56,13 @@ class HFile extends Equatable implements Comparable<HFile> {
     return isBinary ? 1 : -1;
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'path': path,
-    };
-  }
-
-  factory HFile.fromMap(dynamic map) {
-    final data = Map<String, dynamic>.from(map);
+  HFile copyWith({
+    String? path,
+    bool? isModified,
+  }) {
     return HFile(
-      data['path'],
+      path ?? this.path,
+      isModified: isModified ?? this.isModified,
     );
   }
 }

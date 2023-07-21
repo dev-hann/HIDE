@@ -18,28 +18,26 @@ class HTab extends StatelessWidget {
 
   Widget item(int index) {
     final file = fileList[index];
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: Center(
-        child: DefaultTextStyle(
-          style: const TextStyle(color: Colors.white),
-          child: HTabButton(
-            isSelected: selectedIndex == index,
-            selectedColor: HColor.grey.withOpacity(0.5),
-            unSelectedColor: HColor.black,
-            selectedStyle: const TextStyle(
-              color: HColor.white,
-              fontWeight: FontWeight.w600,
-            ),
-            unSelectedStyle: const TextStyle(color: HColor.white),
-            name: file.name,
-            onTap: () {
-              onTap(index);
-            },
-            onTapClose: () {
-              onTapClose(index);
-            },
+    return Center(
+      child: DefaultTextStyle(
+        style: const TextStyle(color: Colors.white),
+        child: HTabButton(
+          isModified: file.isModified,
+          isSelected: selectedIndex == index,
+          selectedColor: HColor.grey.withOpacity(0.5),
+          unSelectedColor: HColor.black,
+          selectedStyle: const TextStyle(
+            color: HColor.white,
+            fontWeight: FontWeight.w600,
           ),
+          unSelectedStyle: const TextStyle(color: HColor.white),
+          name: file.name,
+          onTap: () {
+            onTap(index);
+          },
+          onTapClose: () {
+            onTapClose(index);
+          },
         ),
       ),
     );
@@ -50,6 +48,7 @@ class HTab extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
@@ -66,6 +65,7 @@ class HTabButton extends HButton {
     Key? key,
     required this.name,
     required this.isSelected,
+    required this.isModified,
     required super.onTap,
     required this.onTapClose,
     required this.unSelectedColor,
@@ -81,11 +81,13 @@ class HTabButton extends HButton {
   final double height;
   final String name;
   final bool isSelected;
+  final bool isModified;
   final Color unSelectedColor;
   final Color selectedColor;
   final TextStyle selectedStyle;
   final TextStyle unSelectedStyle;
   final VoidCallback onTapClose;
+
   Color get hoverColor => selectedColor.withOpacity(0.05);
   Color buttonColor(bool onHover) {
     if (isSelected) {
@@ -122,6 +124,13 @@ class HTabButton extends HButton {
     );
   }
 
+  Widget trailWidget() {
+    return Icon(
+      isModified ? Icons.circle : Icons.close,
+      size: 16,
+    );
+  }
+
   @override
   Widget button(BuildContext context, bool onHover, Offset hoverOffset) {
     return ClipRRect(
@@ -152,7 +161,7 @@ class HTabButton extends HButton {
                     const SizedBox(width: 16),
                     GestureDetector(
                       onTap: onTapClose,
-                      child: const Icon(Icons.close, size: 16),
+                      child: trailWidget(),
                     ),
                   ],
                 ),

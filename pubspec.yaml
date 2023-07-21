@@ -8,16 +8,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  # StateManager
   flutter_bloc:
   bloc:
   equatable:
+
   resizable_widget: ^1.0.5
   window_manager: ^0.3.5
-  hive:
-  hive_flutter:
   yaml: ^3.1.1
 
+  # DB
+  hive:
+  hive_flutter:
+
+  # Terminal
   xterm: ^3.5.0
   flutter_pty: ^0.4.0
 dev_dependencies:

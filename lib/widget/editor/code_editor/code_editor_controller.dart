@@ -8,6 +8,21 @@ class CodeEditorController extends TextEditingController {
   }) : super(text: text);
   final Syntax? syntax;
 
+  // late StreamSubscription? subscription;
+  // void init() {
+  //   if (file != null) {
+  //     subscription = file!.stream.listen((event) {
+  //       text = file!.data;
+  //     });
+  //   }
+  // }
+
+  // @override
+  // void dispose() {
+  //   subscription?.cancel();
+  //   super.dispose();
+  // }
+
   int get lines {
     return text.split("\n").length;
   }

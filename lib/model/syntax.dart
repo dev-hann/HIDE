@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 class Syntax {
   Syntax(this.laguage, this.items);
@@ -14,5 +14,16 @@ class Syntax {
       return color(value);
     }
     return Color(value);
+  }
+
+  factory Syntax.dart() {
+    return Syntax(
+      "dart",
+      {
+        "class": Colors.orange.value,
+        "import": Colors.greenAccent.value,
+        "extends": Colors.orangeAccent.value,
+      },
+    );
   }
 }
